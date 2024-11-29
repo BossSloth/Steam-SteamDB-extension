@@ -122,7 +122,7 @@ window.browser.i18n.getMessage = function (messageKey: string, substitutions: st
         substitutions = [substitutions];
     }
 
-    let lang: Record<string, { message: string; placeholders?: Record<string, { content: string; }> }>|null = JSON.parse(sessionStorage.getItem(langKey) ?? '{}');
+    let lang: Record<string, { message: string; placeholders?: Record<string, { content: string; }> }>|null = JSON.parse(localStorage.getItem(langKey + VERSION) ?? '{}');
     if (lang === null || Object.keys(lang).length === 0) {
         console.error('[SteamDB plugin] SteamDB lang file not loaded in.');
         return messageKey;
