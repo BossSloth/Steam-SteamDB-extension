@@ -1,13 +1,10 @@
-import {getCdn, getSteamLoopBackHost} from "./shared.js";
-import {getNeededScripts} from "./script-loading.js"
+import './browser';
+import { injectPreferences } from './preferences';
+import { getNeededScripts } from './script-loading';
+import { getCdn } from "./shared";
 
-
-// The location of browser.js relative to your skin folder, so skins/{skinName}/{browserFileLoc}
-let browserFileLoc = "SteamDB/browser.js";
-
-
-async function loadScript(src) {
-    return new Promise((resolve, reject) => {
+async function loadScript(src: string) {
+    return new Promise<void>((resolve, reject) => {
         var script = document.createElement('script');
         script.setAttribute('type', 'text/javascript');
         script.setAttribute('src', src);
@@ -25,8 +22,6 @@ async function loadScript(src) {
 }
 
 async function loadPageSpecificScripts() {
-    let href = window.location.href;
-
     let scripts = getNeededScripts();
 
     for (const script of scripts) {
@@ -34,12 +29,15 @@ async function loadPageSpecificScripts() {
     }
 }
 
-async function main() {
-    await loadScript(getSteamLoopBackHost(browserFileLoc));
+export default async function WebkitMain () {
+    console.log("SteamDB plugin is running...");
+
     await loadScript(getCdn("scripts/common.js"));
     await loadScript(getCdn("scripts/global.js"));
 
-    await loadPageSpecificScripts();
-}
+    loadPageSpecificScripts(); 
 
-main();
+    if (window.location.href.includes("https://store.steampowered.com/account")) {
+       injectPreferences(); 
+    }
+}

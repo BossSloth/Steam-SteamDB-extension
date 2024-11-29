@@ -3,3 +3,7 @@
 @import url("https://cdn.jsdelivr.net/gh/SteamDatabase/BrowserExtension@latest/styles/global.css");
 @import url("https://cdn.jsdelivr.net/gh/SteamDatabase/BrowserExtension@latest/styles/inventory.css");
 @import url("https://cdn.jsdelivr.net/gh/SteamDatabase/BrowserExtension@latest/styles/store.css");
+
+#steamdb-options {
+    cursor: pointer;
+}

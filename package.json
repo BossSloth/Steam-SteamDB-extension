@@ -1,0 +1,22 @@
+{
+  "scripts": {
+    "dev": "millennium-ttc --build dev",
+    "watch": "nodemon --watch webkit --watch frontend --ext ts,tsx,js,jsx --exec \"millennium-ttc --build dev\"",
+    "build": "millennium-ttc --build prod"
+  },
+  "devDependencies": {
+    "@types/react": "16.14.0",
+    "@types/react-dom": "^18.3.1",
+    "@types/webpack": "^5.28.5",
+    "esbuild": "^0.24.0",
+    "millennium-lib": "^3.7.11",
+    "nodemon": "^3.1.7"
+  },
+  "type": "module",
+  "name": "steamdb-plugin",
+  "version": "1.0.0",
+  "description": "A SteamDB plugin for Millennium",
+  "main": "./frontend/index.jsx",
+  "author": "BossSloth",
+  "license": "MIT"
+}

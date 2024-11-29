@@ -1,0 +1,5 @@
+node_modules/
+.venv/
+.millennium/
+bun.lockb
+package-lock.json

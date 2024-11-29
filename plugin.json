@@ -1,0 +1,7 @@
+{
+    "$schema": "https://raw.githubusercontent.com/SteamClientHomebrew/Millennium/main/src/sys/plugin-schema.json",
+    "name": "steam-db",
+    "common_name": "SteamDB extension",
+    "description": "SteamDB browser extension for your Steam client",
+    "version": "1.0.0"
+}

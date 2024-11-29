@@ -34,4 +34,5 @@ def convert_to_js(manifest_file):
             print('    scripts.push("{}");'.format(js_file))
         print('}\n')
 
-convert_to_js('https://cdn.jsdelivr.net/gh/SteamDatabase/BrowserExtension@latest/manifest.json')
+if __name__ == "__main__":
+    convert_to_js('https://cdn.jsdelivr.net/gh/SteamDatabase/BrowserExtension@4.10/manifest.json')
