@@ -22,18 +22,23 @@ def run_build():
     os.chdir(root_dir)
     
     try:
-        # Try using global bun installation without capturing output
+        # Run bun run build command
         process = subprocess.Popen(['bun', 'run', 'build'], 
-                                shell=True,
+                                shell=False, # Needs to be False to work in the github action. Set to True if running locally
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE,
-                                universal_newlines=True)
+                                universal_newlines=True,
+                                cwd=str(root_dir))
+        
+        finished = False
         
         # Print output in real-time
         while True:
             output = process.stdout.readline()
             if output:
                 print(output.strip())
+            if "Build succeeded" in output:
+                finished = True
             # Print any errors
             error = process.stderr.readline()
             if error:
@@ -42,7 +47,7 @@ def run_build():
             if output == '' and error == '' and process.poll() is not None:
                 break
         
-        if process.returncode != 0:
+        if process.returncode != 0 or not finished:
             print("Build failed")
             return False
             
@@ -101,7 +106,7 @@ def create_zip():
 
 def main():
     if not run_build():
-        return
+        exit(1)        
     
     create_zip()
     print("\nBuild and zip creation completed!")
