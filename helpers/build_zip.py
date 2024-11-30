@@ -7,12 +7,12 @@ from pathlib import Path
 # Global configuration
 EXCLUDED_DIRS = {
     '.git', '.venv', 'node_modules', 'helpers', 'webkit', 'frontend',
-    '__pycache__', 'Images'
+    '__pycache__', 'Images', '.github',
 }
 
 EXCLUDED_FILES = {
     '.gitignore', 'tsconfig.json', 'bun.lockb', 'package.json',
-    'steamdb-plugin.zip'
+    'steamdb-plugin.zip',
 }
 
 def run_build():
@@ -22,9 +22,12 @@ def run_build():
     os.chdir(root_dir)
     
     try:
+        # Use shell=True on Windows for local execution
+        use_shell = os.name == 'nt'  # True on Windows, False on Unix
+        
         # Run bun run build command
         process = subprocess.Popen(['bun', 'run', 'build'], 
-                                shell=False, # Needs to be False to work in the github action. Set to True if running locally
+                                shell=use_shell,
                                 stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE,
                                 universal_newlines=True,
@@ -74,17 +77,15 @@ def should_include_file(file_path: Path, root_dir: Path) -> bool:
     return True
 
 def create_zip():
-    # Get the project root directory
-    root_dir = Path(__file__).parent.parent
-    zip_path = root_dir / 'SteamDB-plugin.zip'
-    root_folder_name = 'SteamDB-plugin'
-
-    # Remove existing zip if it exists
-    if zip_path.exists():
-        zip_path.unlink()
-
-    print(f"Creating zip file: {zip_path}")
+    # Get version from environment variable, default to empty string if not set
+    version = os.environ.get('RELEASE_VERSION', '')
+    zip_name = f"SteamDB-plugin{f'-{version}' if version else ''}.zip"
     
+    # Get the root directory of the project
+    root_dir = Path(__file__).parent.parent
+    zip_path = root_dir / zip_name
+    print(f"\nCreating zip file: {zip_path}")
+
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
         for root, dirs, files in os.walk(root_dir):
             # Remove excluded directories to prevent walking into them
@@ -94,13 +95,13 @@ def create_zip():
                 file_path = Path(root) / file
                 
                 # Skip the zip file itself
-                if file == zip_path.name:
+                if ".zip" in file_path.name:
                     continue
                     
                 if should_include_file(file_path, root_dir):
                     # Get the relative path and add root folder
                     rel_path = file_path.relative_to(root_dir)
-                    zip_path_with_root = Path(root_folder_name) / rel_path
+                    zip_path_with_root = Path('SteamDB-plugin') / rel_path
                     print(f"Adding: {zip_path_with_root}")
                     zipf.write(file_path, str(zip_path_with_root))
 
