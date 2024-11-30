@@ -4,7 +4,7 @@ This plugin ports the functionality of the popular [SteamDB Browser Extension](h
 
 ## Features
 >Pretty much all of the SteamDB extension's features are included in this plugin.
-<br>
+  
 See the [SteamDB Browser Extension](https://github.com/SteamDatabase/BrowserExtension) for more details about each feature or SteamDB's [extension page](https://steamdb.info/extension/).
 
 ## Installation
