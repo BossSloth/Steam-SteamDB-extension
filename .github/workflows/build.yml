@@ -46,9 +46,15 @@ jobs:
         env:
           RELEASE_VERSION: ${{ inputs.version }}
           
+      - name: Extract zip for artifact
+        run: |
+          mkdir -p temp_artifact
+          unzip "SteamDB-plugin-${{ inputs.version }}.zip" -d temp_artifact/
+          
       - name: Upload Build Artifact
         uses: actions/upload-artifact@v4
         with:
           name: SteamDB-plugin-${{ inputs.version }}
-          path: SteamDB-plugin-${{ inputs.version }}.zip
-          compression-level: 0  # Already compressed
+          path: temp_artifact/*
+          if-no-files-found: error
+          overwrite: true
