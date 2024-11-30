@@ -8,53 +8,46 @@ import requests
 
 WEBKIT_CSS_FILE = "steamdb-webkit.css"
 CSS_ID = None
+DEFAULT_HEADERS = {
+    'Accept': 'application/json',
+    'X-Requested-With': 'SteamDB',
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.142.86 Safari/537.36',
+}
 
-def GetApp(appid: int, contentScriptQuery: str):
+def Request(url: str, params: dict) -> str:
+    try:
+        response = requests.get(url, params=params, headers=DEFAULT_HEADERS)
+        response.raise_for_status()
+        return response.text
+    except Exception as error:
+        return json.dumps({
+            'success': False,
+            'error': str(error) + ' ' + response.text
+        })
+
+def GetApp(appid: int, contentScriptQuery: str) -> str:
     logger.log(f"Getting app info for {appid}")
 
-    try:
-        params = {'appid': int(appid)}
-        headers = {
-            'Accept': 'application/json',
-            'X-Requested-With': 'SteamDB',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.142.86 Safari/537.36',
-        }
-        
-        response = requests.get(
-            f'https://steamdb.info/api/ExtensionApp/',
-            params=params,
-            headers=headers
-        )
-        response.raise_for_status()
-        return response.text
-    except Exception as error:
-        return json.dumps({
-            'success': False,
-            'error': str(error) + ' ' + response.text
-        })
+    return Request(
+        f'https://steamdb.info/api/ExtensionApp/',
+        {'appid': int(appid)}   
+    )
 
-def GetAppPrice(appid: int, currency: str, contentScriptQuery: str):
+def GetAppPrice(appid: int, currency: str, contentScriptQuery: str) -> str:
     logger.log(f"Getting app price for {appid} in {currency}")
-    try:
-        params = {'appid': int(appid), 'currency': currency}
-        headers = {
-            'Accept': 'application/json',
-            'X-Requested-With': 'SteamDB',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.142.86 Safari/537.36',
-        }
-        
-        response = requests.get(
-            f'https://steamdb.info/api/ExtensionAppPrice/',
-            params=params,
-            headers=headers
-        )
-        response.raise_for_status()
-        return response.text
-    except Exception as error:
-        return json.dumps({
-            'success': False,
-            'error': str(error) + ' ' + response.text
-        })
+    
+    return Request(
+        f'https://steamdb.info/api/ExtensionAppPrice/',
+        {'appid': int(appid), 'currency': currency}
+    )
+    
+def GetAchievementsGroups(appid: int, contentScriptQuery: str) -> str:
+    logger.log(f"Getting achievements groups for {appid}")
+
+    return Request(
+        f'https://steamdb.info/api/ExtensionGetAchievements/',
+        {'appid': int(appid)}
+    )   
 
 class Plugin:
     def copy_webkit_files(self):

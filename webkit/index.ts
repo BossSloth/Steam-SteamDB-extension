@@ -21,11 +21,34 @@ async function loadScript(src: string) {
     });
 }
 
+async function loadStyle(src: string) {
+    return new Promise<void>((resolve, reject) => {
+        var style = document.createElement('link');
+        style.setAttribute('rel', 'stylesheet');
+        style.setAttribute('type', 'text/css');
+        style.setAttribute('href', src);
+
+        style.addEventListener('load', () => {
+            resolve();
+        }); 
+
+        style.addEventListener('error', () => {
+            reject(new Error('Failed to load style'));
+        });
+
+        document.head.appendChild(style);
+    });
+}
+
 async function loadPageSpecificScripts() {
     let scripts = getNeededScripts();
 
-    for (const script of scripts) {
-        await loadScript(getCdn(script))
+    for (const script of scripts.filter(script => script.includes(".js"))) {
+        await loadScript(getCdn(script));
+    }
+
+    for (const style of scripts.filter(script => script.includes(".css"))) {
+        await loadStyle(getCdn(style));
     }
 }
 

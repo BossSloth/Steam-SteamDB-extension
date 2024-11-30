@@ -16,6 +16,7 @@ export function getNeededScripts(): string[] {
     
     if (href.match("https://store\.steampowered\.com/account/licenses.*")) {
         scripts.push("scripts/store/account_licenses.js");
+        scripts.push("styles/account_licenses.css");
     }
     
     if (href.match("https://store\.steampowered\.com/account/registerkey.*")) {
@@ -53,16 +54,24 @@ export function getNeededScripts(): string[] {
     
     if (href.match("https://steamcommunity\.com/id/.*/inventory.*") || href.match("https://steamcommunity\.com/profiles/.*/inventory.*")) {
         scripts.push("scripts/community/profile_inventory.js");
+        scripts.push("styles/inventory.css");
     }
     
     if (href.match("https://steamcommunity\.com/id/.*/stats.*") || href.match("https://steamcommunity\.com/profiles/.*/stats.*")) {
         scripts.push("scripts/community/achievements.js");
         scripts.push("scripts/community/achievements_profile.js");
+        scripts.push("styles/achievements.css");
+    }
+    
+    if (href.match("https://steamcommunity\.com/id/.*/stats/CSGO.*") || href.match("https://steamcommunity\.com/profiles/.*/stats/CSGO.*")) {
+        scripts.push("scripts/community/achievements_cs2.js");
+        scripts.push("styles/achievements_cs2.css");
     }
     
     if (href.match("https://steamcommunity\.com/stats/.*/achievements.*")) {
         scripts.push("scripts/community/achievements.js");
         scripts.push("scripts/community/achievements_global.js");
+        scripts.push("styles/achievements.css");
     }
     
     if (href.match("https://steamcommunity\.com/tradeoffer/.*")) {
@@ -87,10 +96,16 @@ export function getNeededScripts(): string[] {
     
     if (href.match("https://steamcommunity\.com/sharedfiles/filedetails.*") || href.match("https://steamcommunity\.com/workshop/filedetails.*")) {
         scripts.push("scripts/community/filedetails.js");
+        scripts.push("scripts/community/filedetails_guide.js");
     }
     
     if (href.match("https://steamcommunity\.com/market/multibuy.*")) {
         scripts.push("scripts/community/multibuy.js");
+    }
+    
+    if (href.match("https://steamcommunity\.com/market/.*")) {
+        scripts.push("scripts/community/market.js");
+        scripts.push("styles/market.css");
     }
     
     if (href.match("https://steamcommunity\.com/app/.*") || href.match("https://steamcommunity\.com/games/.*") || href.match("https://steamcommunity\.com/sharedfiles/.*") || href.match("https://steamcommunity\.com/workshop/.*")) {
