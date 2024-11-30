@@ -17,32 +17,20 @@ permissions:
   contents: write
 
 jobs:
-  build-and-release:
+  build:
+    uses: ./.github/workflows/build.yml
+    with:
+      version: ${{ github.event.inputs.version }}
+      
+  release:
+    needs: build
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-        
-      - name: Setup Python
-        uses: actions/setup-python@v4
+      - name: Download Build Artifact
+        uses: actions/download-artifact@v4
         with:
-          python-version: '3.12'
-          
-      - name: Setup Bun
-        uses: oven-sh/setup-bun@v1
-        with:
-          bun-version: latest
-          
-      - name: Install dependencies
-        run: |
-          bun install
-          pip install -r requirements.txt
-          
-      - name: Build and create zip
-        run: python helpers/build_zip.py
-        env:
-          RELEASE_VERSION: ${{ github.event.inputs.version }}
+          name: ${{ needs.build.outputs.artifact-name }}
           
       - name: Create Release
         id: create_release

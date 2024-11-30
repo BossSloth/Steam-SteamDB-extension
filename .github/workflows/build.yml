@@ -1,0 +1,48 @@
+name: Build Plugin
+
+on:
+  workflow_call:
+    inputs:
+      version:
+        description: 'Version tag (e.g., 1.0.0 or beta-1)'
+        required: true
+        type: string
+    outputs:
+      artifact-name:
+        description: "Name of the uploaded artifact"
+        value: SteamDB-plugin-${{ inputs.version }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+          
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latest
+          
+      - name: Install dependencies
+        run: |
+          bun install
+          pip install -r requirements.txt
+          
+      - name: Build and create zip
+        run: python helpers/build_zip.py
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+          
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: SteamDB-plugin-${{ inputs.version }}
+          path: SteamDB-plugin-${{ inputs.version }}.zip
+          compression-level: 0  # Already compressed

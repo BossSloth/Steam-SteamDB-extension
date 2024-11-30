@@ -79,7 +79,11 @@ def should_include_file(file_path: Path, root_dir: Path) -> bool:
 def create_zip():
     # Get version from environment variable, default to empty string if not set
     version = os.environ.get('RELEASE_VERSION', '')
-    zip_name = f"SteamDB-plugin{f'-{version}' if version else ''}.zip"
+    if not version:
+        print("Error: RELEASE_VERSION environment variable is required")
+        return False
+        
+    zip_name = f"SteamDB-plugin-{version}.zip"
     
     # Get the root directory of the project
     root_dir = Path(__file__).parent.parent
