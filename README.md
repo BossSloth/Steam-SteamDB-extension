@@ -9,7 +9,7 @@ See the [SteamDB Browser Extension](https://github.com/SteamDatabase/BrowserExte
 
 ## Installation
 
-1. Ensure you have [Millennium](https://github.com/shdwmtr/millennium) installed on your Steam client
+1. Ensure you have at least version 2.16.0 of [Millennium](https://github.com/shdwmtr/millennium) installed on your Steam client
 2. Download the [latest release](https://github.com/tddebart/Steam-SteamDB-addon/releases) of this plugin
 3. Place the plugin files in your Millennium plugins directory (should be a plugins folder in your Steam client directory)
 4. Restart your Steam client
