@@ -1,6 +1,12 @@
 name: Build Plugin
 
 on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version tag (e.g., 1.0.0 or beta-1)'
+        required: true
+        type: string
   workflow_call:
     inputs:
       version:
@@ -11,7 +17,7 @@ on:
       artifact-name:
         description: "Name of the uploaded artifact"
         value: SteamDB-plugin-${{ inputs.version }}
-
+        
 jobs:
   build:
     runs-on: ubuntu-latest
