@@ -44,7 +44,7 @@ async function loadPageSpecificScripts() {
     let scripts = getNeededScripts();
 
     for (const script of scripts.filter(script => script.includes(".js"))) {
-        await loadScript(getCdn(script));
+        await loadScript(getCdn(script.replace('.js', '.min.js')));
     }
 
     for (const style of scripts.filter(script => script.includes(".css"))) {
@@ -55,8 +55,8 @@ async function loadPageSpecificScripts() {
 export default async function WebkitMain () {
     console.log("SteamDB plugin is running...");
 
-    await loadScript(getCdn("scripts/common.js"));
-    await loadScript(getCdn("scripts/global.js"));
+    await loadScript(getCdn("scripts/common.min.js"));
+    await loadScript(getCdn("scripts/global.min.js"));
 
     loadPageSpecificScripts(); 
 
