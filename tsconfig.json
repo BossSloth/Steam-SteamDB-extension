@@ -18,6 +18,5 @@
       "skipLibCheck": true,
       "resolveJsonModule": true
     },
-    "include": ["frontend", "webkit"],
     "exclude": ["node_modules"]
 }
