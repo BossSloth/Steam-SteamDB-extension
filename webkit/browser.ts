@@ -1,3 +1,4 @@
+import { callable } from "@steambrew/webkit";
 import { CDN, VERSION } from "./shared";
 
 // In this file we emulate the extension browser api for the steamdb extension
@@ -158,7 +159,8 @@ window.browser.runtime.getURL = function (res: string) {
 //#endregion
 
 window.browser.runtime.sendMessage = async function (message: any) {
-    let response = await Millennium.callServerMethod(message.contentScriptQuery, message) as string; // We can't use the new callable here because it import millennium-lib which bloats the webkit.js file
+    const method = callable<[any]>(message.contentScriptQuery);
+    let response = await method(message) as string;
     return JSON.parse(response);
 }
 
@@ -179,10 +181,7 @@ document.createElement = function (tagName: string, options?: ElementCreationOpt
                         tag.addEventListener('click', (e) => {
                             e.preventDefault();
 
-                            // Middle click on the link
-                            // if (e.button === 1) {
                             window.open(tag.href, 'BrowserViewPopup', `width=${window.screen.width*0.8},height=${window.screen.height*0.8},resizeable,status=0,toolbar=0,menubar=0,location=0`);
-                            // }
                         });
                     }
 

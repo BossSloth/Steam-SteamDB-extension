@@ -1,11 +1,9 @@
 {
     "compilerOptions": {
-      "outDir": "dist",
+      "outDir": ".millennium/Dist",
       "module": "ESNext",
       "target": "ES2020",
       "jsx": "react",
-      "jsxFactory": "window.SP_REACT.createElement",
-      "jsxFragmentFactory": "window.SP_REACT.Fragment",
       "declaration": false,
       "moduleResolution": "node",
       "noUnusedLocals": true,

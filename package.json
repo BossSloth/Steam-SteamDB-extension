@@ -6,10 +6,8 @@
   },
   "devDependencies": {
     "@types/react": "16.14.0",
-    "@types/react-dom": "^18.3.1",
+    "@types/react-dom": "^18.3.2",
     "@types/webpack": "^5.28.5",
-    "esbuild": "^0.24.0",
-    "millennium-lib": "^3.7.11",
     "nodemon": "^3.1.7"
   },
   "type": "module",
@@ -18,5 +16,11 @@
   "description": "A SteamDB plugin for Millennium",
   "main": "./frontend/index.jsx",
   "author": "BossSloth",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@steambrew/api": "^4.2.0",
+    "@steambrew/client": "^4.2.0",
+    "@steambrew/ttc": "^1.0.5",
+    "@steambrew/webkit": "^4.2.0"
+  }
 }
