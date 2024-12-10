@@ -5,5 +5,4 @@
     "jsxFragmentFactory": "window.SP_REACT.Fragment"
   },
   "include": ["."],
-  "exclude": ["node_modules", "../webkit"]
 }
