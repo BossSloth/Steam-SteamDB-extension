@@ -18,8 +18,6 @@ See the [SteamDB Browser Extension](https://github.com/SteamDatabase/BrowserExte
 ## Usage
 
 Once installed it should just work out of the box.
-<br> 
-Make sure the the plugin folder is called exactly "SteamDB-plugin". Otherwise things like the styling or options page will break.
 <br>
 To see if the plugin is working you can go to any store app page and look for these icons
 ![SteamDB icons](Images/steam_store.png)
