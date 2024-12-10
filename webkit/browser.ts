@@ -177,10 +177,11 @@ document.createElement = function (tagName: string, options?: ElementCreationOpt
                     // if (!tag.href.includes('steampowered.com') && !tag.href.includes('steamcommunity.com')) {
                     //     tag.href = "steam://openurl_external/" + tag.href;
                     // }
-                    if (tag.href.includes('steamdb.info')) {
+                    if (tag.href.includes('steamdb.info') || tag.href.includes('pcgamingwiki.com')) {
                         tag.addEventListener('click', (e) => {
                             e.preventDefault();
 
+                            // TODO: find better way of opening popups
                             window.open(tag.href, 'BrowserViewPopup', `width=${window.screen.width*0.8},height=${window.screen.height*0.8},resizeable,status=0,toolbar=0,menubar=0,location=0`);
                         });
                     }
