@@ -14,6 +14,9 @@ DEFAULT_HEADERS = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.142.86 Safari/537.36',
 }
 
+def GetPluginDir():
+    return os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
+
 def Request(url: str, params: dict) -> str:
     try:
         response = requests.get(url, params=params, headers=DEFAULT_HEADERS)
@@ -51,7 +54,7 @@ def GetAchievementsGroups(appid: int, contentScriptQuery: str) -> str:
 
 class Plugin:
     def copy_webkit_files(self):
-        webkitCssFilePath = os.path.join(Millennium.steam_path(), "plugins", "SteamDB-plugin", "public", WEBKIT_CSS_FILE)
+        webkitCssFilePath = os.path.join(GetPluginDir(), "public", WEBKIT_CSS_FILE)
         steamUIPath = os.path.join(Millennium.steam_path(), "steamui", "SteamDB", WEBKIT_CSS_FILE)
         
         logger.log(f"Copying css webkit file from {webkitCssFilePath} to {steamUIPath}")
