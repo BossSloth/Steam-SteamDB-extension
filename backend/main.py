@@ -18,6 +18,7 @@ def GetPluginDir():
     return os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
 
 def Request(url: str, params: dict) -> str:
+    response = None
     try:
         response = requests.get(url, params=params, headers=DEFAULT_HEADERS)
         response.raise_for_status()
@@ -25,7 +26,7 @@ def Request(url: str, params: dict) -> str:
     except Exception as error:
         return json.dumps({
             'success': False,
-            'error': str(error) + ' ' + response.text
+            'error': str(error) + ' ' + (response.text if response else 'No response')
         })
 
 def GetApp(appid: int, contentScriptQuery: str) -> str:
@@ -77,5 +78,3 @@ class Plugin:
 
     def _unload(self):
         logger.log("unloading")
-        if (CSS_ID != None):
-            Millennium.remove_browser_module(CSS_ID)
