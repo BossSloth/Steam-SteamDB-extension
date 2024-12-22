@@ -16,7 +16,7 @@
   },
   "type": "module",
   "name": "steamdb-plugin",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "description": "A SteamDB plugin for Millennium",
   "main": "./frontend/index.jsx",
   "author": "BossSloth",
