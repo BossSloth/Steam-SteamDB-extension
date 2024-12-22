@@ -2,3 +2,4 @@ node_modules/
 .venv/
 .millennium/
 build/
+!bun.lockb
