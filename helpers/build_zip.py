@@ -110,6 +110,8 @@ def create_zip():
                     zip_path_with_root = Path('SteamDB-plugin') / rel_path
                     print(f"Adding: {zip_path_with_root}")
                     zipf.write(file_path, str(zip_path_with_root))
+                    
+    return True
 
 def main():
     if not run_build():
