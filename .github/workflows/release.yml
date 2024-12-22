@@ -2,16 +2,6 @@ name: Create Release
 
 on:
   workflow_dispatch:
-    inputs:
-      version:
-        description: 'Version number (e.g., 1.0.0)'
-        required: true
-        type: string
-      prerelease:
-        description: 'Is this a pre-release?'
-        required: true
-        type: boolean
-        default: false
 
 permissions:
   contents: write
@@ -39,42 +29,33 @@ jobs:
       - name: Install dependencies
         run: |
           bun install
-          bun add -d semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github
           pip install -r requirements.txt
+
+      - name: Get Next Version
+        id: get_next_version
+        run: |
+          next_version=$(npx semantic-release --dry-run | grep "next release version is" | awk '{print $NF}')
+          echo "next_version=$next_version" >> $GITHUB_ENV
           
       - name: Update version in files
         run: bun run helpers/update-version.ts
         env:
-          RELEASE_VERSION: ${{ github.event.inputs.version }}
+          RELEASE_VERSION: ${{ env.next_version }}
           
       - name: Commit version updates
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           git add package.json plugin.json
-          git commit -m "chore: bump version to ${{ github.event.inputs.version }}"
+          git commit -m "chore: bump version to ${{ env.next_version }}"
           git push
           
       - name: Build and create zip
         run: python helpers/build_zip.py
         env:
-          RELEASE_VERSION: ${{ github.event.inputs.version }}
+          RELEASE_VERSION: ${{ env.next_version }}
 
       - name: Run Semantic Release
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
-      # - name: Create Release
-      #   id: create_release
-      #   uses: softprops/action-gh-release@v1
-      #   with:
-      #     tag_name: ${{ github.event.inputs.version }}
-      #     name: Release ${{ github.event.inputs.version }}
-      #     draft: false
-      #     prerelease: ${{ github.event.inputs.prerelease }}
-      #     files: |
-      #       SteamDB-plugin-${{ github.event.inputs.version }}.zip
-      #     generate_release_notes: true
-      #   env:
-      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
