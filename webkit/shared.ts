@@ -10,3 +10,15 @@ declare global{
         steamDBBrowser: any;
     }
 }
+
+export const Logger = {
+    Error: (...message: string[]) => {
+        console.error('%c SteamDB plugin ', 'background: red; color: white', ...message);
+    },
+    Log: (...message: string[]) => {
+        console.log('%c SteamDB plugin ', 'background: purple; color: white', ...message);
+    },
+    Warn: (...message: string[]) => {
+        console.warn('%c SteamDB plugin ', 'background: orange; color: white', ...message);
+    }
+};

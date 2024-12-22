@@ -1,5 +1,5 @@
 import { callable } from "@steambrew/webkit";
-import { CDN, VERSION } from "./shared";
+import { CDN, Logger, VERSION } from "./shared";
 
 // In this file we emulate the extension browser api for the steamdb extension
 
@@ -23,7 +23,7 @@ steamDBBrowser.storage.sync.get = async function (items: any): Promise<any> {
     try {
         parsedData = storedData ? JSON.parse(storedData) : {};
     } catch (e) {
-        console.error('[SteamDB plugin] failed to parse JSON for steamdb-options');
+        Logger.Error('failed to parse JSON for steamdb-options');
     }
 
     if (Array.isArray(items)) {
@@ -52,7 +52,7 @@ steamDBBrowser.storage.sync.set = async function (item: { [key: string]: any }) 
     try {
         parsedData = storedData ? JSON.parse(storedData) : {};
     } catch (e) {
-        console.error('[SteamDB plugin] failed to parse JSON for steamdb-options');
+        Logger.Error('failed to parse JSON for steamdb-options');
     }
 
     let key = Object.keys(item)[0];
@@ -90,16 +90,48 @@ steamDBBrowser.permissions.contains = function (_: any, callback: (result: boole
 
 // #region i18n Translation
 steamDBBrowser.i18n = {};
-const langKey = "steamDB_en";
-async function getLang() {
-    if (localStorage.getItem(langKey + VERSION) === null) {
-        console.log('[SteamDB plugin] getting EN lang');
+const langPrefix = "steamDB_";
+let langKey = "";
+export async function getLang() {
+    let language = navigator.language.toLowerCase().split("-")[0];
+    const longLanguage = navigator.language.replaceAll('-', "_");
+    langKey = langPrefix + language;
 
-        const response = await fetch(CDN + "/_locales/en/messages.json");
-        localStorage.setItem(langKey + VERSION, JSON.stringify(await response.json()));
+    // Make an exception for es-419
+    if (navigator.language === "es-419") {
+        language = 'es_419';
+        langKey = langPrefix + language;
     }
+
+    if (localStorage.getItem(langKey + VERSION) === null) {
+        if (localStorage.getItem(langPrefix + longLanguage + VERSION) !== null) {
+            Logger.Log(`using "${longLanguage}" lang`);
+            langKey = langPrefix + longLanguage;
+            return;
+        }
+        Logger.Log(`getting "${language}" lang`);
+
+        let response = await fetch(CDN + `/_locales/${language}/messages.json`);
+
+        if (!response.ok) {
+            // Try full language key
+            Logger.Warn(`failed to fetch SteamDB lang file for "${language}". Trying "${longLanguage}"`);
+            langKey = langPrefix + longLanguage;
+
+            response = await fetch(CDN + `/_locales/${longLanguage}/messages.json`);
+
+            if (!response.ok) {
+                Logger.Warn(`failed to fetch SteamDB lang file for "${language}". Falling back to EN.`);
+                langKey = langPrefix + "en";
+                response = await fetch(CDN + "/_locales/en/messages.json");
+            
+            }
+        }
+        localStorage.setItem(langKey + VERSION, JSON.stringify(await response.json()));
+    } 
+
+    Logger.Log(`using "${language}" lang`);
 }
-getLang();
 
 /* example record
 {
@@ -117,6 +149,7 @@ getLang();
 }
 */
 steamDBBrowser.i18n.getMessage = function (messageKey: string, substitutions: string|string[]) {
+    // Ignore invalid message key
     if (messageKey === '@@bidi_dir') {
         return messageKey;
     }
@@ -124,16 +157,16 @@ steamDBBrowser.i18n.getMessage = function (messageKey: string, substitutions: st
     if (!Array.isArray(substitutions)) {
         substitutions = [substitutions];
     }
-
-    let lang: Record<string, { message: string; placeholders?: Record<string, { content: string; }> }>|null = JSON.parse(localStorage.getItem(langKey + VERSION) ?? '{}');
+    type LangType = Record<string, { message: string; placeholders?: Record<string, { content: string; }> }>|null;
+    let lang: LangType = JSON.parse(localStorage.getItem(langKey + VERSION) ?? '{}');
     if (lang === null || Object.keys(lang).length === 0) {
-        console.error('[SteamDB plugin] SteamDB lang file not loaded in.');
+        Logger.Error('SteamDB lang file not loaded in.');
         return messageKey;
     }
 
     const langObject = lang[messageKey];
     if (langObject === undefined) {
-        console.error(`[SteamDB plugin] Unknown message key: ${messageKey}`);
+        Logger.Error(`Unknown message key: ${messageKey}`);
         return messageKey;
     }
 

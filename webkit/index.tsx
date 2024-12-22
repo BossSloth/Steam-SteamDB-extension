@@ -1,7 +1,8 @@
 import './browser';
+import { getLang } from './browser';
 import { injectPreferences } from './preferences';
 import { getNeededScripts } from './script-loading';
-import { getCdn } from "./shared";
+import { getCdn, Logger } from "./shared";
 
 async function loadScript(src: string) {
     return new Promise<void>((resolve, reject) => {
@@ -61,11 +62,12 @@ async function loadPageSpecificScripts() {
 }
 
 export default async function WebkitMain () {
-    console.log("SteamDB plugin is running...");
+    Logger.Log("plugin is running");
     let commonScript = await (await fetch(getCdn('scripts/common.min.js'))).text();
     commonScript = commonScript.replaceAll('browser', 'steamDBBrowser');
     loadScriptWithContent(commonScript);
     await loadScript(getCdn("scripts/global.min.js"));
+    await getLang();
 
     loadPageSpecificScripts(); 
 
