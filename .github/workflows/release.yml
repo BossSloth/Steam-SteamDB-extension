@@ -41,6 +41,8 @@ jobs:
         run: |
           next_version=$(bun semantic-release --dry-run | grep "next release version is" | awk '{print $NF}')
           echo "next_version=$next_version" >> $GITHUB_ENV
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           
       - name: Update version in files
         run: bun run helpers/update-version.ts
