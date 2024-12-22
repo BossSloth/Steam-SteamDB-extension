@@ -34,7 +34,7 @@ jobs:
       - name: Get Next Version
         id: get_next_version
         run: |
-          next_version=$(npx semantic-release --dry-run | grep "next release version is" | awk '{print $NF}')
+          next_version=$(bun semantic-release --dry-run | grep "next release version is" | awk '{print $NF}')
           echo "next_version=$next_version" >> $GITHUB_ENV
           
       - name: Update version in files
@@ -56,6 +56,6 @@ jobs:
           RELEASE_VERSION: ${{ env.next_version }}
 
       - name: Run Semantic Release
-        run: npx semantic-release
+        run: bun semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
