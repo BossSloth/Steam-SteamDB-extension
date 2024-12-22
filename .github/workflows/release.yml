@@ -39,6 +39,7 @@ jobs:
       - name: Install dependencies
         run: |
           bun install
+          bun add -d semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github
           pip install -r requirements.txt
           
       - name: Update version in files
@@ -58,17 +59,22 @@ jobs:
         run: python helpers/build_zip.py
         env:
           RELEASE_VERSION: ${{ github.event.inputs.version }}
-          
-      - name: Create Release
-        id: create_release
-        uses: softprops/action-gh-release@v1
-        with:
-          tag_name: ${{ github.event.inputs.version }}
-          name: Release ${{ github.event.inputs.version }}
-          draft: false
-          prerelease: ${{ github.event.inputs.prerelease }}
-          files: |
-            SteamDB-plugin-${{ github.event.inputs.version }}.zip
-          generate_release_notes: true
+
+      - name: Run Semantic Release
+        run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      # - name: Create Release
+      #   id: create_release
+      #   uses: softprops/action-gh-release@v1
+      #   with:
+      #     tag_name: ${{ github.event.inputs.version }}
+      #     name: Release ${{ github.event.inputs.version }}
+      #     draft: false
+      #     prerelease: ${{ github.event.inputs.prerelease }}
+      #     files: |
+      #       SteamDB-plugin-${{ github.event.inputs.version }}.zip
+      #     generate_release_notes: true
+      #   env:
+      #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

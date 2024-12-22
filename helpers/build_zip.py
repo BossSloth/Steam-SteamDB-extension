@@ -87,7 +87,9 @@ def create_zip():
     
     # Get the root directory of the project
     root_dir = Path(__file__).parent.parent
-    zip_path = root_dir / zip_name
+    build_dir = root_dir / 'build'
+    build_dir.mkdir(parents=True, exist_ok=True)
+    zip_path = build_dir / zip_name
     print(f"\nCreating zip file: {zip_path}")
 
     with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
@@ -113,7 +115,8 @@ def main():
     if not run_build():
         exit(1)        
     
-    create_zip()
+    if not create_zip():
+        exit(1)
     print("\nBuild and zip creation completed!")
 
 if __name__ == "__main__":
