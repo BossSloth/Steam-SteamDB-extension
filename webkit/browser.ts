@@ -213,12 +213,19 @@ document.createElement = function (tagName: string, options?: ElementCreationOpt
                     //     tag.href = "steam://openurl_external/" + tag.href;
                     // }
                     if (tag.href.includes('steamdb.info') || tag.href.includes('pcgamingwiki.com')) {
-                        tag.addEventListener('click', (e) => {
+                        tag.onclick = (e) => {
+                            if (e.ctrlKey) {
+                                return;
+                            }
                             e.preventDefault();
 
-                            // TODO: find better way of opening popups
-                            window.open(tag.href, 'BrowserViewPopup', `width=${window.screen.width*0.8},height=${window.screen.height*0.8},resizeable,status=0,toolbar=0,menubar=0,location=0`);
-                        });
+                            // Click on element with ctrl
+                            const event = new MouseEvent('click', { bubbles: true,
+                                cancelable: true,
+                                view: window,
+                                ctrlKey: true });
+                            tag.dispatchEvent(event);
+                        };
                     }
 
                     observer.disconnect();
