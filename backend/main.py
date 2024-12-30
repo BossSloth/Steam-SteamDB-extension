@@ -1,4 +1,6 @@
-import Millennium, PluginUtils # type: ignore
+import Millennium
+import PluginUtils # type: ignore
+
 logger = PluginUtils.Logger("steam-db")
 
 import json

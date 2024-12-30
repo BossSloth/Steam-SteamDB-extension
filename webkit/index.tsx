@@ -62,12 +62,18 @@ async function loadPageSpecificScripts() {
 }
 
 export default async function WebkitMain () {
+    const href = window.location.href;
+
+    if (!href.includes("https://store.steampowered.com") && !href.includes("https://steamcommunity.com")) {
+        return;
+    }
+
     Logger.Log("plugin is running");
     let commonScript = await (await fetch(getCdn('scripts/common.min.js'))).text();
     commonScript = commonScript.replaceAll('browser', 'steamDBBrowser');
     loadScriptWithContent(commonScript);
-    await loadScript(getCdn("scripts/global.min.js"));
     await getLang();
+    await loadScript(getCdn("scripts/global.min.js"));
 
     loadPageSpecificScripts(); 
 
