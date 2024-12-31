@@ -12,7 +12,8 @@
     ],
     {
       "path": "@semantic-release/github",
-      "assets": ["build/*.zip"]
+      "assets": ["build/*.zip"],
+      "draftRelease"; true,
     }
   ]
 }
