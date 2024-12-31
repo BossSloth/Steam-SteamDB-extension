@@ -4,16 +4,22 @@ import { injectPreferences } from './preferences';
 import { getNeededScripts } from './script-loading';
 import { getCdn, loadScript, loadScriptWithContent, loadStyle, Logger } from './shared';
 
-async function loadPageSpecificScripts() {
-    let scripts = getNeededScripts();
-
+async function loadJsScripts(scripts: string[]) {
     for (const script of scripts.filter(script => script.includes('.js'))) {
         await loadScript(getCdn(script.replace('.js', '.min.js')));
     }
+}
 
+async function loadCssStyles(scripts: string[]) {
     for (const style of scripts.filter(script => script.includes('.css'))) {
         await loadStyle(getCdn(style));
     }
+}
+
+async function initCommonScript() {
+    let commonScript = await (await fetch(getCdn('scripts/common.min.js'))).text();
+    commonScript = commonScript.replaceAll('browser', 'steamDBBrowser');
+    loadScriptWithContent(commonScript);
 }
 
 export default async function WebkitMain() {
@@ -24,13 +30,17 @@ export default async function WebkitMain() {
     }
 
     Logger.Log('plugin is running');
-    let commonScript = await (await fetch(getCdn('scripts/common.min.js'))).text();
-    commonScript = commonScript.replaceAll('browser', 'steamDBBrowser');
-    loadScriptWithContent(commonScript);
-    await getLang();
+
+    const scripts = getNeededScripts();
+
+    await Promise.all([
+        initCommonScript(),
+        getLang(),
+        loadCssStyles(scripts),
+    ]);
     await loadScript(getCdn('scripts/global.min.js'));
 
-    loadPageSpecificScripts();
+    await loadJsScripts(scripts);
 
     if (window.location.href.includes('https://store.steampowered.com/account')) {
         injectPreferences();
