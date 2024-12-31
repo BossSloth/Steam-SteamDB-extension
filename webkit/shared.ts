@@ -1,11 +1,11 @@
-export const VERSION = "4.10";
+export const VERSION = '4.10';
 export const CDN = `https://cdn.jsdelivr.net/gh/SteamDatabase/BrowserExtension@${VERSION}`;
 
 export function getCdn(path: string) {
     return `${CDN}/${path}`;
 }
 
-declare global{
+declare global {
     interface Window {
         steamDBBrowser: any;
     }
@@ -20,5 +20,5 @@ export const Logger = {
     },
     Warn: (...message: string[]) => {
         console.warn('%c SteamDB plugin ', 'background: orange; color: white', ...message);
-    }
+    },
 };

@@ -2,11 +2,11 @@ import './browser';
 import { getLang } from './browser';
 import { injectPreferences } from './preferences';
 import { getNeededScripts } from './script-loading';
-import { getCdn, Logger } from "./shared";
+import { getCdn, Logger } from './shared';
 
 async function loadScript(src: string) {
     return new Promise<void>((resolve, reject) => {
-        var script = document.createElement('script');
+        const script = document.createElement('script');
         script.setAttribute('type', 'text/javascript');
         script.setAttribute('src', src);
 
@@ -23,7 +23,7 @@ async function loadScript(src: string) {
 }
 
 function loadScriptWithContent(scriptString: string) {
-    var script = document.createElement('script');
+    const script = document.createElement('script');
     script.setAttribute('type', 'text/javascript');
     script.innerHTML = scriptString;
 
@@ -32,14 +32,14 @@ function loadScriptWithContent(scriptString: string) {
 
 async function loadStyle(src: string) {
     return new Promise<void>((resolve, reject) => {
-        var style = document.createElement('link');
+        const style = document.createElement('link');
         style.setAttribute('rel', 'stylesheet');
         style.setAttribute('type', 'text/css');
         style.setAttribute('href', src);
 
         style.addEventListener('load', () => {
             resolve();
-        }); 
+        });
 
         style.addEventListener('error', () => {
             reject(new Error('Failed to load style'));
@@ -52,32 +52,32 @@ async function loadStyle(src: string) {
 async function loadPageSpecificScripts() {
     let scripts = getNeededScripts();
 
-    for (const script of scripts.filter(script => script.includes(".js"))) {
+    for (const script of scripts.filter(script => script.includes('.js'))) {
         await loadScript(getCdn(script.replace('.js', '.min.js')));
     }
 
-    for (const style of scripts.filter(script => script.includes(".css"))) {
+    for (const style of scripts.filter(script => script.includes('.css'))) {
         await loadStyle(getCdn(style));
     }
 }
 
-export default async function WebkitMain () {
+export default async function WebkitMain() {
     const href = window.location.href;
 
-    if (!href.includes("https://store.steampowered.com") && !href.includes("https://steamcommunity.com")) {
+    if (!href.includes('https://store.steampowered.com') && !href.includes('https://steamcommunity.com')) {
         return;
     }
 
-    Logger.Log("plugin is running");
+    Logger.Log('plugin is running');
     let commonScript = await (await fetch(getCdn('scripts/common.min.js'))).text();
     commonScript = commonScript.replaceAll('browser', 'steamDBBrowser');
     loadScriptWithContent(commonScript);
     await getLang();
-    await loadScript(getCdn("scripts/global.min.js"));
+    await loadScript(getCdn('scripts/global.min.js'));
 
-    loadPageSpecificScripts(); 
+    loadPageSpecificScripts();
 
-    if (window.location.href.includes("https://store.steampowered.com/account")) {
-       injectPreferences(); 
+    if (window.location.href.includes('https://store.steampowered.com/account')) {
+        injectPreferences();
     }
 }

@@ -1,5 +1,5 @@
 import Millennium
-import PluginUtils # type: ignore
+import PluginUtils  # type: ignore
 
 logger = PluginUtils.Logger("steam-db")
 
@@ -36,47 +36,47 @@ def GetApp(appid: int, contentScriptQuery: str) -> str:
 
     return Request(
         f'https://steamdb.info/api/ExtensionApp/',
-        {'appid': int(appid)}   
+        {'appid': int(appid)}
     )
 
 def GetAppPrice(appid: int, currency: str, contentScriptQuery: str) -> str:
     logger.log(f"Getting app price for {appid} in {currency}")
-    
+
     return Request(
         f'https://steamdb.info/api/ExtensionAppPrice/',
         {'appid': int(appid), 'currency': currency}
     )
-    
+
 def GetAchievementsGroups(appid: int, contentScriptQuery: str) -> str:
     logger.log(f"Getting achievements groups for {appid}")
 
     return Request(
         f'https://steamdb.info/api/ExtensionGetAchievements/',
         {'appid': int(appid)}
-    )   
+    )
 
 class Plugin:
     def copy_webkit_files(self):
         webkitCssFilePath = os.path.join(GetPluginDir(), "public", WEBKIT_CSS_FILE)
         steamUIPath = os.path.join(Millennium.steam_path(), "steamui", "SteamDB", WEBKIT_CSS_FILE)
-        
+
         logger.log(f"Copying css webkit file from {webkitCssFilePath} to {steamUIPath}")
         try:
             os.makedirs(os.path.dirname(steamUIPath), exist_ok=True)
             shutil.copy(webkitCssFilePath, steamUIPath)
         except Exception as e:
             logger.error(f"Failed to copy webkit file, {e}")
-        
-        CSS_ID = Millennium.add_browser_css(os.path.join("SteamDB", WEBKIT_CSS_FILE))
-        
-    def _front_end_loaded(self):
-        self.copy_webkit_files()        
 
-    def _load(self):     
+        CSS_ID = Millennium.add_browser_css(os.path.join("SteamDB", WEBKIT_CSS_FILE))
+
+    def _front_end_loaded(self):
+        self.copy_webkit_files()
+
+    def _load(self):
         logger.log(f"bootstrapping SteamDB plugin, millennium {Millennium.version()}")
         self.copy_webkit_files()
 
-        Millennium.ready() # this is required to tell Millennium that the backend is ready.
+        Millennium.ready()  # this is required to tell Millennium that the backend is ready.
 
     def _unload(self):
         logger.log("unloading")

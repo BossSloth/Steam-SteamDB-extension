@@ -1,30 +1,32 @@
-import { callable } from "@steambrew/webkit";
-import { CDN, Logger, VERSION } from "./shared";
+import { callable } from '@steambrew/webkit';
+import { CDN, Logger, VERSION } from './shared';
 
 // In this file we emulate the extension browser api for the steamdb extension
 
 window.steamDBBrowser = {};
 const steamDBBrowser = window.steamDBBrowser;
 
-//#region Browser storage / options
-steamDBBrowser.storage = {};
-steamDBBrowser.storage.sync = {};
-steamDBBrowser.storage.sync.onChanged = {};
 steamDBBrowser.runtime = {};
 steamDBBrowser.runtime.id = 'kdbmhfkmnlmbkgbabkdealhhbfhlmmon'; // Chrome
 
+//#region Browser storage / options
+steamDBBrowser.storage = {};
+steamDBBrowser.storage.sync = {};
+
 export const STORAGE_KEY = 'steamdb-options';
 
-steamDBBrowser.storage.sync.get = async function (items: any): Promise<any> {
-    let storedData = localStorage.getItem(STORAGE_KEY);
-    let result: { [key: string]: any } = {};
-    let parsedData: { [key: string]: any } = {};
-
+function parseStoredData(): Record<string, any> {
+    const storedData = localStorage.getItem(STORAGE_KEY);
     try {
-        parsedData = storedData ? JSON.parse(storedData) : {};
+        return storedData ? JSON.parse(storedData) : {};
     } catch (e) {
-        Logger.Error('failed to parse JSON for steamdb-options');
+        throw new Error(`Failed to parse JSON for key: ${STORAGE_KEY}`);
     }
+}
+
+steamDBBrowser.storage.sync.get = async function (items: any): Promise<any> {
+    let parsedData = parseStoredData();
+    let result: Record<string, any> = {};
 
     if (Array.isArray(items)) {
         items.forEach(key => {
@@ -34,103 +36,102 @@ steamDBBrowser.storage.sync.get = async function (items: any): Promise<any> {
         });
     }
     if (typeof items === 'object') {
-            for (let key in items) {
-                let foundItem = key in parsedData ? parsedData[key] : items[key];
-                if (typeof foundItem === 'boolean') {
-                    result[key] = foundItem
-                }
-            }
+        for (let key in items) {
+            result[key] = key in parsedData ? parsedData[key] : items[key];
+        }
     }
 
     return result;
-}
+};
 
-steamDBBrowser.storage.sync.set = async function (item: { [key: string]: any }) {
-    let storedData = localStorage.getItem(STORAGE_KEY);
-    let parsedData: { [key: string]: any } = {};
+type StorageListener = (changes: Record<string, { oldValue: any; newValue: any; }>) => void;
+let storageListeners: StorageListener[] = [];
 
-    try {
-        parsedData = storedData ? JSON.parse(storedData) : {};
-    } catch (e) {
-        Logger.Error('failed to parse JSON for steamdb-options');
-    }
+steamDBBrowser.storage.sync.set = async function (item: Record<string, any>) {
+    let parsedData = parseStoredData();
 
     let key = Object.keys(item)[0];
     storageListeners.forEach(callback => {
         callback({
             [key]: {
                 oldValue: parsedData[key],
-                newValue: item[key]
-            }
+                newValue: item[key],
+            },
         });
     });
 
     Object.assign(parsedData, item);
     localStorage.setItem(STORAGE_KEY, JSON.stringify(parsedData));
-}
+};
 
 steamDBBrowser.storage.sync.onChanged = {};
-let storageListeners: ((changes: { [key: string]: { oldValue: any; newValue: any; } }) => void)[] = [];
-steamDBBrowser.storage.sync.onChanged.addListener = function (callback: (changes: { [key: string]: { oldValue: any; newValue: any; } }) => void) {
+steamDBBrowser.storage.sync.onChanged.addListener = function (callback: StorageListener) {
     storageListeners.push(callback);
-}
-//#endregion
-
-//#region fake permissions
-steamDBBrowser.permissions = {};
-steamDBBrowser.permissions.request = function () {};
-steamDBBrowser.permissions.onAdded = {};
-steamDBBrowser.permissions.onAdded.addListener = function () {};
-steamDBBrowser.permissions.onRemoved = {};
-steamDBBrowser.permissions.onRemoved.addListener = function () {};
-steamDBBrowser.permissions.contains = function (_: any, callback: (result: boolean) => void) {
-    callback(true);
 };
 //#endregion
 
-// #region i18n Translation
-steamDBBrowser.i18n = {};
-const langPrefix = "steamDB_";
-let langKey = "";
-export async function getLang() {
-    let language = navigator.language.toLowerCase().split("-")[0];
-    const longLanguage = navigator.language.replaceAll('-', "_");
-    langKey = langPrefix + language;
+//#region Fake permissions
+steamDBBrowser.permissions = {};
+steamDBBrowser.permissions.request = () => {};
+steamDBBrowser.permissions.onAdded = {};
+steamDBBrowser.permissions.onAdded.addListener = () => {};
+steamDBBrowser.permissions.onRemoved = {};
+steamDBBrowser.permissions.onRemoved.addListener = () => {};
+steamDBBrowser.permissions.contains = (_: any, callback: (result: boolean) => void) => callback(true);
+//#endregion
 
-    // Make an exception for es-419
-    if (navigator.language === "es-419") {
-        language = 'es_419';
-        langKey = langPrefix + language;
+//#region i18n Translation
+steamDBBrowser.i18n = {};
+const langPrefix = 'steamDB_';
+let langKey = '';
+
+export async function getLang(): Promise<void> {
+    const language = navigator.language.replace('-', '_');
+    const shortLanguage = language.split('_')[0];
+    langKey = langPrefix + shortLanguage;
+
+    // Handle es-419 exception
+    if (language === 'es_419') {
+        langKey = langPrefix + 'es_419';
     }
 
-    if (localStorage.getItem(langKey + VERSION) === null) {
-        if (localStorage.getItem(langPrefix + longLanguage + VERSION) !== null) {
-            Logger.Log(`using "${longLanguage}" lang`);
-            langKey = langPrefix + longLanguage;
+    const longLangKey = langPrefix + language;
+
+    if (!localStorage.getItem(langKey + VERSION)) {
+        if (localStorage.getItem(longLangKey + VERSION)) {
+            Logger.Log(`using "${language}" lang`);
+            langKey = longLangKey;
             return;
         }
-        Logger.Log(`getting "${language}" lang`);
 
-        let response = await fetch(CDN + `/_locales/${language}/messages.json`);
+        Logger.Log(`fetching "${shortLanguage}" lang`);
+
+        const fetchLangFile = async (lang: string) =>
+            await fetch(`${CDN}/_locales/${lang}/messages.json`);
+
+        let response = await fetchLangFile(shortLanguage);
 
         if (!response.ok) {
-            // Try full language key
-            Logger.Warn(`failed to fetch SteamDB lang file for "${language}". Trying "${longLanguage}"`);
-            langKey = langPrefix + longLanguage;
+            Logger.Warn(`failed to fetch SteamDB lang file for "${shortLanguage}". Trying "${language}"`);
+            langKey = longLangKey;
 
-            response = await fetch(CDN + `/_locales/${longLanguage}/messages.json`);
+            response = await fetchLangFile(language);
 
             if (!response.ok) {
                 Logger.Warn(`failed to fetch SteamDB lang file for "${language}". Falling back to EN.`);
-                langKey = langPrefix + "en";
-                response = await fetch(CDN + "/_locales/en/messages.json");
-            
+                langKey = langPrefix + 'en';
+                response = await fetchLangFile('en');
             }
         }
-        localStorage.setItem(langKey + VERSION, JSON.stringify(await response.json()));
-    } 
 
-    Logger.Log(`using "${language}" lang`);
+        if (response.ok) {
+            localStorage.setItem(langKey + VERSION, JSON.stringify(await response.json()));
+        } else {
+            throw new Error('Failed to load any language file.');
+        }
+    }
+
+    Logger.Log(`using "${langKey.replace(langPrefix, '')}" lang`);
 }
 
 /* example record
@@ -148,7 +149,18 @@ export async function getLang() {
     }
 }
 */
-steamDBBrowser.i18n.getMessage = function (messageKey: string, substitutions: string|string[]) {
+interface Placeholder {
+    content: string;
+    example?: string;
+}
+
+interface LangObject {
+    message: string;
+    placeholders?: Record<string, Placeholder>;
+}
+
+type LangType = Record<string, LangObject>;
+steamDBBrowser.i18n.getMessage = function (messageKey: string, substitutions: string | string[]) {
     // Ignore invalid message key
     if (messageKey === '@@bidi_dir') {
         return messageKey;
@@ -157,7 +169,6 @@ steamDBBrowser.i18n.getMessage = function (messageKey: string, substitutions: st
     if (!Array.isArray(substitutions)) {
         substitutions = [substitutions];
     }
-    type LangType = Record<string, { message: string; placeholders?: Record<string, { content: string; }> }>|null;
     let lang: LangType = JSON.parse(localStorage.getItem(langKey + VERSION) ?? '{}');
     if (lang === null || Object.keys(lang).length === 0) {
         Logger.Error('SteamDB lang file not loaded in.');
@@ -179,65 +190,77 @@ steamDBBrowser.i18n.getMessage = function (messageKey: string, substitutions: st
     }
 
     return messageTemplate;
-}
+};
 steamDBBrowser.i18n.getUILanguage = function () {
     return 'en-US';
-}
-// #endregion
+};
+//#endregion
 
 //#region getResourceUrl
 steamDBBrowser.runtime = {};
 
 steamDBBrowser.runtime.getURL = function (res: string) {
-    return CDN + "/" + res;
-}
+    return CDN + '/' + res;
+};
 //#endregion
 
 steamDBBrowser.runtime.sendMessage = async function (message: any) {
     const method = callable<[any]>(message.contentScriptQuery);
     let response = await method(message) as string;
     return JSON.parse(response);
+};
+
+//#region Open extension links in new window
+const oldCreateElement = document.createElement.bind(document);
+
+const popupLinks = [
+    'steamdb.info',
+    'pcgamingwiki.com',
+];
+
+function addPopupClickListener(tag: HTMLAnchorElement): void {
+    popupLinks.forEach(link => {
+        if (tag.href.includes(link)) {
+            tag.onclick = (event) => {
+                if (event.ctrlKey) {
+                    return;
+                }
+
+                event.preventDefault();
+
+                const ctrlClickEvent = new MouseEvent('click', {
+                    bubbles: true,
+                    cancelable: true,
+                    view: window,
+                    ctrlKey: true,
+                });
+
+                tag.dispatchEvent(ctrlClickEvent);
+            };
+        }
+    });
 }
 
-//#region add external to newly created a tags
-let oldCreateElement = document.createElement.bind(document);
+function observeAnchorTag(tag: HTMLAnchorElement): void {
+    const observer = new MutationObserver((mutations) => {
+        mutations.forEach(mutation => {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'href') {
+                addPopupClickListener(tag);
+                observer.disconnect();
+            }
+        });
+    });
+
+    observer.observe(tag, {attributes: true});
+}
 
 document.createElement = function (tagName: string, options?: ElementCreationOptions) {
-    let tag: HTMLAnchorElement = oldCreateElement(tagName, options);
+    const tag: HTMLAnchorElement = oldCreateElement(tagName, options);
 
-    if (tagName.toLowerCase() === "a") {
-        var callback = function(mutationsList: MutationRecord[], observer: MutationObserver) {
-            for(let mutation of mutationsList) {
-                if (mutation.type === 'attributes' && mutation.attributeName === 'href') {
-                    // if (!tag.href.includes('steampowered.com') && !tag.href.includes('steamcommunity.com')) {
-                    //     tag.href = "steam://openurl_external/" + tag.href;
-                    // }
-                    if (tag.href.includes('steamdb.info') || tag.href.includes('pcgamingwiki.com')) {
-                        tag.onclick = (e) => {
-                            if (e.ctrlKey) {
-                                return;
-                            }
-                            e.preventDefault();
-
-                            // Click on element with ctrl
-                            const event = new MouseEvent('click', { bubbles: true,
-                                cancelable: true,
-                                view: window,
-                                ctrlKey: true });
-                            tag.dispatchEvent(event);
-                        };
-                    }
-
-                    observer.disconnect();
-                }
-            }
-        };
-
-        var observer = new MutationObserver(callback);
-
-        observer.observe(tag, { attributes: true });
+    if (tagName.toLowerCase() === 'a') {
+        observeAnchorTag(tag);
     }
 
     return tag;
-}
+};
 //#endregion

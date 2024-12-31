@@ -1,14 +1,14 @@
-import { STORAGE_KEY } from "./browser";
-import { CDN } from "./shared";
+import { STORAGE_KEY } from './browser';
+import { CDN } from './shared';
 
 export function injectPreferences() {
-    let sidebarContainer = document.querySelector('.two_column.left');
-    let mainContainer = document.querySelector('.two_column.right');
+    const sidebarContainer = document.querySelector('.two_column.left');
+    const mainContainer = document.querySelector('.two_column.right');
 
-    let steamdbOptions = document.createElement('div');
+    const steamdbOptions = document.createElement('div');
     steamdbOptions.setAttribute('id', 'steamdb-options');
     steamdbOptions.classList.add('nav_item');
-    steamdbOptions.innerHTML = `<img class="ico16" src="${CDN}/icons/white.svg"> <span>SteamDB Options</span>`;
+    steamdbOptions.innerHTML = `<img class="ico16" src="${CDN}/icons/white.svg" alt="logo"> <span>SteamDB Options</span>`;
 
     sidebarContainer.appendChild(steamdbOptions);
 
@@ -18,40 +18,41 @@ export function injectPreferences() {
         });
         steamdbOptions.classList.toggle('active');
 
-        let url = new URL(window.location.href);
+        const url = new URL(window.location.href);
+        url.search = '';
         url.searchParams.set('steamdb', 'true');
         window.history.replaceState({}, '', url.href);
 
-        let optionsHtml = await (await fetch(`${CDN}/options/options.html`)).text();
-        loadStyle();
-        loadScript();
-        
+        const optionsHtml = await (await fetch(`${CDN}/options/options.html`)).text();
+        await Promise.all([
+            loadStyle(),
+            loadScript(),
+        ]);
+
         mainContainer.innerHTML = optionsHtml;
 
         // Create reset button
-        let resetButton = document.createElement('div');
-        resetButton.title = 'Will reset all options to their default values. No Warning!';
+        let resetButton = document.createElement('button');
+        resetButton.onclick = () => {
+            if (!window.confirm('Are you sure you want to reset all options?')) {
+                return;
+            }
+
+            localStorage.removeItem(STORAGE_KEY);
+            window.location.reload();
+        };
         resetButton.classList.add('queue_control_button');
         resetButton.style.marginTop = '1rem';
-        resetButton.innerHTML = `<div class="btnv6_blue_hoverfade btn_medium queue_btn_inactive">
-                                    <span>Reset options!</span>
-                                </div>`;
-        resetButton.addEventListener('click', async () => {
-            if (resetButton.style.backgroundColor === 'red') {
-                localStorage.removeItem(STORAGE_KEY); window.location.reload();
-            } else {
-                resetButton.style.backgroundColor = 'red';
-                resetButton.style.color = 'white';
-                resetButton.innerHTML = `<div class="btnv6_blue_hoverfade btn_medium queue_btn_inactive" style="background-color: red !important; color: white !important;">
-										    <span>Are you sure?</span>
-									    </div>`
-            }
-        });
+
+        const span = document.createElement('span');
+        span.dataset.tooltipText = 'Will reset all options to their default values.';
+        span.innerText = 'Reset options!';
+        resetButton.appendChild(span);
 
         mainContainer.appendChild(resetButton);
     });
 
-    let url = new URL(window.location.href);
+    const url = new URL(window.location.href);
     if (url.searchParams.get('steamdb') === 'true') {
         steamdbOptions.click();
     }
