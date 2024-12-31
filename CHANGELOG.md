@@ -1,3 +1,21 @@
+# [1.2.0](https://github.com/tddebart/Steam-SteamDB-extension/compare/v1.1.0...v1.2.0) (2024-12-31)
+
+
+### Bug Fixes
+
+* .releaserc ([d992283](https://github.com/tddebart/Steam-SteamDB-extension/commit/d99228336deb31d760950acd25853dbc73b97d0f))
+* preferences page no longer working & improved reset button styling ([d4e3f71](https://github.com/tddebart/Steam-SteamDB-extension/commit/d4e3f71741fcbab2d009a82c003ba9388fd242fd))
+
+
+### Features
+
+* open non steam links in steam browser ([10f38dd](https://github.com/tddebart/Steam-SteamDB-extension/commit/10f38dd22a25b285383410c818f2891054de58d8))
+
+
+### Performance Improvements
+
+* slightly improve load in time ([ebe0da7](https://github.com/tddebart/Steam-SteamDB-extension/commit/ebe0da7a8263febfaa4c605859dfaea557f39451))
+
 # [1.1.0](https://github.com/tddebart/Steam-SteamDB-extension/compare/v1.0.3...v1.1.0) (2024-12-22)
 
 
