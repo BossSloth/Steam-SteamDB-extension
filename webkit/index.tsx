@@ -2,52 +2,7 @@ import './browser';
 import { getLang } from './browser';
 import { injectPreferences } from './preferences';
 import { getNeededScripts } from './script-loading';
-import { getCdn, Logger } from './shared';
-
-async function loadScript(src: string) {
-    return new Promise<void>((resolve, reject) => {
-        const script = document.createElement('script');
-        script.setAttribute('type', 'text/javascript');
-        script.setAttribute('src', src);
-
-        script.addEventListener('load', () => {
-            resolve();
-        });
-
-        script.addEventListener('error', () => {
-            reject(new Error('Failed to load script'));
-        });
-
-        document.head.appendChild(script);
-    });
-}
-
-function loadScriptWithContent(scriptString: string) {
-    const script = document.createElement('script');
-    script.setAttribute('type', 'text/javascript');
-    script.innerHTML = scriptString;
-
-    document.head.appendChild(script);
-}
-
-async function loadStyle(src: string) {
-    return new Promise<void>((resolve, reject) => {
-        const style = document.createElement('link');
-        style.setAttribute('rel', 'stylesheet');
-        style.setAttribute('type', 'text/css');
-        style.setAttribute('href', src);
-
-        style.addEventListener('load', () => {
-            resolve();
-        });
-
-        style.addEventListener('error', () => {
-            reject(new Error('Failed to load style'));
-        });
-
-        document.head.appendChild(style);
-    });
-}
+import { getCdn, loadScript, loadScriptWithContent, loadStyle, Logger } from './shared';
 
 async function loadPageSpecificScripts() {
     let scripts = getNeededScripts();

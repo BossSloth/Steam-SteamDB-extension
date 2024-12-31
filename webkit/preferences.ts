@@ -1,5 +1,5 @@
 import { STORAGE_KEY } from './browser';
-import { CDN } from './shared';
+import { CDN, getCdn, loadScript, loadStyle } from './shared';
 
 export function injectPreferences() {
     const sidebarContainer = document.querySelector('.two_column.left');
@@ -23,16 +23,15 @@ export function injectPreferences() {
         url.searchParams.set('steamdb', 'true');
         window.history.replaceState({}, '', url.href);
 
-        const optionsHtml = await (await fetch(`${CDN}/options/options.html`)).text();
+        mainContainer.innerHTML = await (await fetch(`${CDN}/options/options.html`)).text();
+
         await Promise.all([
-            loadStyle(),
-            loadScript(),
+            loadStyle(getCdn('/options/options.css')),
+            loadScript(getCdn('/options/options.js')),
         ]);
 
-        mainContainer.innerHTML = optionsHtml;
-
         // Create reset button
-        let resetButton = document.createElement('button');
+        let resetButton = document.createElement('div');
         resetButton.onclick = () => {
             if (!window.confirm('Are you sure you want to reset all options?')) {
                 return;
@@ -41,12 +40,17 @@ export function injectPreferences() {
             localStorage.removeItem(STORAGE_KEY);
             window.location.reload();
         };
-        resetButton.classList.add('queue_control_button');
-        resetButton.style.marginTop = '1rem';
+        resetButton.classList.add('store_header_btn');
+        resetButton.classList.add('store_header_btn_gray');
+        resetButton.style.position = 'fixed';
+        resetButton.style.bottom = '1em';
+        resetButton.style.right = '1em';
+        resetButton.style.cursor = 'pointer';
 
         const span = document.createElement('span');
         span.dataset.tooltipText = 'Will reset all options to their default values.';
         span.innerText = 'Reset options!';
+        span.style.margin = '1em';
         resetButton.appendChild(span);
 
         mainContainer.appendChild(resetButton);
@@ -56,20 +60,4 @@ export function injectPreferences() {
     if (url.searchParams.get('steamdb') === 'true') {
         steamdbOptions.click();
     }
-}
-
-async function loadStyle() {
-    let styleContent = await (await fetch(`${CDN}/options/options.css`)).text();
-
-    let style = document.createElement('style');
-    style.innerHTML = styleContent;
-    document.head.appendChild(style);
-}
-
-async function loadScript() {
-    let scriptContent = await (await fetch(`${CDN}/options/options.js`)).text();
-
-    let script = document.createElement('script');
-    script.innerHTML = scriptContent;
-    document.head.appendChild(script);
 }
