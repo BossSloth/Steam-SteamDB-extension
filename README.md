@@ -7,6 +7,12 @@ This plugin ports the functionality of the popular [SteamDB Browser Extension](h
   
 See the [SteamDB Browser Extension](https://github.com/SteamDatabase/BrowserExtension) for more details about each feature or SteamDB's [extension page](https://steamdb.info/extension/).
 
+|                           Store                            |                         Options Page                          |
+|:----------------------------------------------------------:|:-------------------------------------------------------------:|
+|       ![SteamDB store page](Images/steam_store.png)        |        ![SteamDB options](Images/steamdb_options.png)         |
+|                **Store Achievement Groups**                |                **Personal Achievement Groups**                |
+| ![Achievement groups](Images/store_achievement_groups.png) | ![Achievement groups](Images/personal_achievement_groups.png) |
+
 ## Installation
 
 1. Ensure you have at least version 2.16.0 of [Millennium](https://github.com/shdwmtr/millennium) installed on your Steam client
