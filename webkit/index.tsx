@@ -3,6 +3,7 @@ import { getLang } from './browser';
 import { injectPreferences } from './preferences';
 import { getNeededScripts } from './script-loading';
 import { getCdn, loadScript, loadScriptWithContent, loadStyle, Logger } from './shared';
+import { createFakeApplicationConfig } from './fakeApplicationConfig';
 
 async function loadJsScripts(scripts: string[]) {
     for (const script of scripts.filter(script => script.includes('.js'))) {
@@ -22,6 +23,11 @@ async function initCommonScript() {
     loadScriptWithContent(commonScript);
 }
 
+const applicationConfigUrls = [
+    /steamcommunity\.com\/stats\//,
+    /steamcommunity\.com\/id\/.+?\/stats\//,
+];
+
 export default async function WebkitMain() {
     const href = window.location.href;
 
@@ -39,6 +45,13 @@ export default async function WebkitMain() {
         loadCssStyles(scripts),
     ]);
     await loadScript(getCdn('scripts/global.min.js'));
+
+    for (const url of applicationConfigUrls) {
+        if (url.test(href)) {
+            createFakeApplicationConfig();
+            break;
+        }
+    }
 
     await loadJsScripts(scripts);
 
