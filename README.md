@@ -12,6 +12,9 @@ See the [SteamDB Browser Extension](https://github.com/SteamDatabase/BrowserExte
 |       ![SteamDB store page](Images/steam_store.png)        |        ![SteamDB options](Images/steamdb_options.png)         |
 |                **Store Achievement Groups**                |                **Personal Achievement Groups**                |
 | ![Achievement groups](Images/store_achievement_groups.png) | ![Achievement groups](Images/personal_achievement_groups.png) |
+|                       **Inventory**                        | |
+| ![Inventory](Images/inventory.png)                         | |
+Some pictures where taken from the SteamDB repository
 
 ## Installation
 
@@ -25,7 +28,7 @@ See the [SteamDB Browser Extension](https://github.com/SteamDatabase/BrowserExte
 
 Once installed it should just work out of the box.
 <br>
-To see if the plugin is working you can go to any store app page and look for the newly added features (highlighted in yellow)
+To see if the plugin is working you can go to any store app page and look for the newly added features
 ![SteamDB icons](Images/steam_store.png)
 
 ## Configuration
@@ -40,12 +43,6 @@ Alternatively, you can access the options page directly by entering this URL in 
 https://store.steampowered.com/account/?steamdb=true
 
 Here you can customize various features and behaviors of the SteamDB plugin to suit your preferences. Just like in the SteamDB extension.
-
-## Images
-#### Store
-![SteamDB store page](Images/steam_store.png)
-#### Options page
-![SteamDB options](Images/steamdb_options.png)
 
 ## Contributing
 
