@@ -28,6 +28,19 @@ const applicationConfigUrls = [
     /steamcommunity\.com\/id\/.+?\/stats\//,
 ];
 
+function addPreferencesButton() {
+    const defaultPreferencesButton = document.evaluate('//a[contains(@class, "popup_menu_item") and contains(text(), "Preferences")]', document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue as HTMLAnchorElement;
+    if (defaultPreferencesButton) {
+        const newButton = defaultPreferencesButton.cloneNode() as HTMLAnchorElement;
+        newButton.href += '&steamdb=true';
+        newButton.innerHTML = `
+            <img class="ico16" style="background: none" src="${getCdn('/icons/white.svg')}" alt="logo">
+            <span>${window.steamDBBrowser.i18n.getMessage('steamdb_options')}</span>
+        `;
+        defaultPreferencesButton.after(newButton);
+    }
+}
+
 export default async function WebkitMain() {
     const href = window.location.href;
 
@@ -54,6 +67,8 @@ export default async function WebkitMain() {
     }
 
     await loadJsScripts(scripts);
+
+    addPreferencesButton();
 
     if (window.location.href.includes('https://store.steampowered.com/account')) {
         injectPreferences();
