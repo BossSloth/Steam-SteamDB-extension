@@ -34,8 +34,7 @@ steamDBBrowser.storage.sync.get = async function (items: any): Promise<any> {
                 result[key] = parsedData[key];
             }
         });
-    }
-    if (typeof items === 'object') {
+    } else if (typeof items === 'object') {
         for (let key in items) {
             result[key] = key in parsedData ? parsedData[key] : items[key];
         }
