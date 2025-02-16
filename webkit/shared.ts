@@ -1,7 +1,7 @@
-export const VERSION = '4.10';
+export const VERSION = '4.13';
 export const CDN = `https://cdn.jsdelivr.net/gh/SteamDatabase/BrowserExtension@${VERSION}`;
 
-export function getCdn(path: string) {
+export function getCdn(path: string) {  
     if (path.startsWith('/')) {
         return `${CDN}${path}`;
     }

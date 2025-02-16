@@ -1,5 +1,6 @@
 import escapeStringRegexp from 'escape-string-regexp';
 import clipboard from 'clipboardy';
+import { getCdn } from '../webkit/shared';
 
 interface ContentScript {
     matches: string[];
@@ -27,7 +28,7 @@ const filtered = [
 ];
 
 function convertToJs(): void {
-    fetch('https://cdn.jsdelivr.net/gh/SteamDatabase/BrowserExtension@4.10/manifest.json').then((response) => response.text()).then((data) => {
+    fetch(getCdn('manifest.json')).then((response) => response.text()).then((data) => {
         const manifestData: ManifestData = JSON.parse(data);
         const contentScripts = manifestData.content_scripts;
         const combinedMatches: { [key: string]: { js: string[]; css: string[] } } = {};
@@ -65,14 +66,14 @@ function convertToJs(): void {
                 continue;
             }
 
-            output += `if (${match}) {\n`;
+            output += `    if (${match}) {\n`;
             uniqueJsFiles.forEach(jsFile => {
-                output += `    scripts.push('${jsFile}');\n`;
+                output += `        scripts.push('${jsFile}');\n`;
             });
             uniqueCssFiles.forEach(cssFile => {
-                output += `    scripts.push('${cssFile}');\n`;
+                output += `        scripts.push('${cssFile}');\n`;
             });
-            output += '}\n\n';
+            output += '    }\n\n';
         }
 
         output = output.trimEnd();
