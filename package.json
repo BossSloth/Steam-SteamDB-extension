@@ -5,12 +5,16 @@
     "build": "millennium-ttc --build prod"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/exec": "^7.0.3",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^11.0.1",
     "@types/react": "16.14.0",
     "@types/react-dom": "^18.3.2",
     "@types/webpack": "^5.28.5",
     "clipboardy": "^4.0.0",
     "nodemon": "^3.1.7",
-    "semantic-release": "^24.2.0"
+    "semantic-release": "^24.2.3"
   },
   "type": "module",
   "name": "steamdb-plugin",

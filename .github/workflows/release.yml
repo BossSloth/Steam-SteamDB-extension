@@ -36,11 +36,6 @@ jobs:
           bun install
           pip install -r requirements.txt
 
-      - name: (Setup) Semantic Release
-        run: npm install --save-dev semantic-release @semantic-release/github @semantic-release/exec @semantic-release/changelog @semantic-release/git
-        env: 
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Get Next Version
         id: get_next_version
         run: |
