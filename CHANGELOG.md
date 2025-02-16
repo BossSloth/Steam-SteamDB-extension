@@ -1,3 +1,21 @@
+# [1.3.0](https://github.com/tddebart/Steam-SteamDB-extension/compare/v1.2.0...v1.3.0) (2025-02-16)
+
+
+### Bug Fixes
+
+* **#13:** achievement dlc groups have the wrong image ([6763e2d](https://github.com/tddebart/Steam-SteamDB-extension/commit/6763e2dbbbe93e11c33413611060b33f93826ea3)), closes [#13](https://github.com/tddebart/Steam-SteamDB-extension/issues/13)
+* ci ([d63b6d7](https://github.com/tddebart/Steam-SteamDB-extension/commit/d63b6d7eee758136ca4409bfbf45cddfcd3ed2d6))
+* ci write issues ([e014f61](https://github.com/tddebart/Steam-SteamDB-extension/commit/e014f6142dc02d412a5c46791ec8e9c80775dfd9))
+* ci? ([997c3ac](https://github.com/tddebart/Steam-SteamDB-extension/commit/997c3acf09647e39efe4560b1d69dae76de9b2a1))
+* semantic release? ([c1d80a1](https://github.com/tddebart/Steam-SteamDB-extension/commit/c1d80a179440d0f03147f33f2d6e67c8eb0aafeb))
+* settings page not reading saved settings closes [#14](https://github.com/tddebart/Steam-SteamDB-extension/issues/14) ([6931c9c](https://github.com/tddebart/Steam-SteamDB-extension/commit/6931c9c11faacee6e5079ac0e17f89078500d3a1))
+
+
+### Features
+
+* Added extra options button below store preferences button, closes [#15](https://github.com/tddebart/Steam-SteamDB-extension/issues/15) ([f216057](https://github.com/tddebart/Steam-SteamDB-extension/commit/f216057c874f30788c741aa24d16129f449e6eeb))
+* update steamdb extension to 4.13 ([90136c1](https://github.com/tddebart/Steam-SteamDB-extension/commit/90136c1cfab8067b632dd84e058cdd561518ca69))
+
 # [1.2.0](https://github.com/tddebart/Steam-SteamDB-extension/compare/v1.1.0...v1.2.0) (2024-12-31)
 
 
