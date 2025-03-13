@@ -20,11 +20,13 @@ Some pictures where taken from the SteamDB repository
 
 ## Installation
 
-1. Ensure you have at least version 2.16.0 of [Millennium](https://github.com/shdwmtr/millennium) installed on your Steam client
-2. Download the [latest release](https://github.com/tddebart/Steam-SteamDB-addon/releases) of this plugin
+1. Ensure you have Millennium installed on your Steam client
+2. Download the [latest release](https://github.com/tddebart/Steam-SteamDB-addon/releases) of this plugin or from the [Steambrew](https://steambrew.app/plugin?id=c36d5f67c99f) website
 3. Place the plugin files in your Millennium plugins directory (should be a plugins folder in your Steam client directory)
 4. Restart your Steam client
 5. Enable the SteamDB plugin in the Millennium plugin menu
+6. Right click steam on your taskbar and Click "Exit Steam" to make sure the plugin is fully loaded (no it does NOT automatically restart, that is a reload)
+7. Startup steam
 
 ## Usage
 
