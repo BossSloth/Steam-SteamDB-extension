@@ -10,10 +10,10 @@
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.1",
     "@types/react": "16.14.0",
-    "@types/react-dom": "^18.3.2",
+    "@types/react-dom": "^18.3.5",
     "@types/webpack": "^5.28.5",
     "clipboardy": "^4.0.0",
-    "nodemon": "^3.1.7",
+    "nodemon": "^3.1.9",
     "semantic-release": "^24.2.3"
   },
   "type": "module",
@@ -24,9 +24,9 @@
   "author": "BossSloth",
   "license": "MIT",
   "dependencies": {
-    "@steambrew/api": "^4.2.0",
-    "@steambrew/client": "^4.2.0",
-    "@steambrew/ttc": "^1.0.5",
-    "@steambrew/webkit": "^4.2.0"
+    "@steambrew/api": "^4.2.2",
+    "@steambrew/client": "^4.2.1",
+    "@steambrew/ttc": "^1.1.1",
+    "@steambrew/webkit": "^4.2.1"
   }
 }
