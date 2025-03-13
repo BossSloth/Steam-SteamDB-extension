@@ -212,10 +212,23 @@ steamDBBrowser.runtime.sendMessage = async function (message: any) {
 //#region Open extension links in new window
 const oldCreateElement = document.createElement.bind(document);
 
-const popupLinks = [
-    'steamdb.info',
+const externalLinks = [
     'pcgamingwiki.com',
 ];
+
+const popupLinks = [
+    'steamdb.info',
+];
+
+const EXTERNAL_PROTOCOL = 'steam://openurl_external/';
+
+function modifyHrefForExternalLinks(tag: HTMLAnchorElement): void {
+    externalLinks.forEach(link => {
+        if (tag.href.includes(link)) {
+            tag.href = EXTERNAL_PROTOCOL + tag.href;
+        }
+    });
+}
 
 function addPopupClickListener(tag: HTMLAnchorElement): void {
     popupLinks.forEach(link => {
@@ -244,6 +257,7 @@ function observeAnchorTag(tag: HTMLAnchorElement): void {
     const observer = new MutationObserver((mutations) => {
         mutations.forEach(mutation => {
             if (mutation.type === 'attributes' && mutation.attributeName === 'href') {
+                modifyHrefForExternalLinks(tag);
                 addPopupClickListener(tag);
                 observer.disconnect();
             }
