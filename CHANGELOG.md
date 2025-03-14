@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/BossSloth/Steam-SteamDB-extension/compare/v1.3.0...v1.4.0) (2025-03-13)
+
+
+### Bug Fixes
+
+* **#4:** open pcgamingwiki in external browser ([c8242ad](https://github.com/BossSloth/Steam-SteamDB-extension/commit/c8242adaeab6339ae6af2c9078c4e256f356595a)), closes [#4](https://github.com/BossSloth/Steam-SteamDB-extension/issues/4)
+
+
+### Features
+
+* update steamdb version to 4.14 ([f404c37](https://github.com/BossSloth/Steam-SteamDB-extension/commit/f404c37e1fb4de9e85954893b5d630265fa2b115))
+
 # [1.3.0](https://github.com/tddebart/Steam-SteamDB-extension/compare/v1.2.0...v1.3.0) (2025-02-16)
 
 
