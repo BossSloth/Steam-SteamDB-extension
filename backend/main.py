@@ -13,8 +13,13 @@ CSS_ID = None
 DEFAULT_HEADERS = {
     'Accept': 'application/json',
     'X-Requested-With': 'SteamDB',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.142.86 Safari/537.36',
+    'User-Agent': 'https://github.com/BossSloth/Steam-SteamDB-extension',
+    'Origin': 'https://github.com/BossSloth/Steam-SteamDB-extension',
+    'Sec-Fetch-Dest': 'empty',
+    'Sec-Fetch-Mode': 'cors',
+    'Sec-Fetch-Site': 'cross-site',
 }
+API_URL = 'https://extension.steamdb.info/api'
 
 def GetPluginDir():
     return os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
@@ -35,7 +40,7 @@ def GetApp(appid: int, contentScriptQuery: str) -> str:
     logger.log(f"Getting app info for {appid}")
 
     return Request(
-        f'https://steamdb.info/api/ExtensionApp/',
+        f'{API_URL}/ExtensionApp/',
         {'appid': int(appid)}
     )
 
@@ -43,7 +48,7 @@ def GetAppPrice(appid: int, currency: str, contentScriptQuery: str) -> str:
     logger.log(f"Getting app price for {appid} in {currency}")
 
     return Request(
-        f'https://steamdb.info/api/ExtensionAppPrice/',
+        f'{API_URL}/ExtensionAppPrice/',
         {'appid': int(appid), 'currency': currency}
     )
 
@@ -51,7 +56,7 @@ def GetAchievementsGroups(appid: int, contentScriptQuery: str) -> str:
     logger.log(f"Getting achievements groups for {appid}")
 
     return Request(
-        f'https://steamdb.info/api/ExtensionGetAchievements/',
+        f'{API_URL}/ExtensionGetAchievements/',
         {'appid': int(appid)}
     )
 
