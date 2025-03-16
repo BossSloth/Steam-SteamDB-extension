@@ -15,18 +15,18 @@ steamDBBrowser.storage.sync = {};
 
 export const STORAGE_KEY = 'steamdb-options';
 
-function parseStoredData(): Record<string, any> {
+function parseStoredData(): Record<string, unknown> {
     const storedData = localStorage.getItem(STORAGE_KEY);
     try {
         return storedData ? JSON.parse(storedData) : {};
-    } catch (e) {
+    } catch {
         throw new Error(`Failed to parse JSON for key: ${STORAGE_KEY}`);
     }
 }
 
-steamDBBrowser.storage.sync.get = async function (items: any): Promise<any> {
-    let parsedData = parseStoredData();
-    let result: Record<string, any> = {};
+steamDBBrowser.storage.sync.get = async function (items: string[]|Record<string, unknown>): Promise<unknown> {
+    const parsedData = parseStoredData();
+    const result: Record<string, unknown> = {};
 
     if (Array.isArray(items)) {
         items.forEach(key => {
@@ -35,7 +35,7 @@ steamDBBrowser.storage.sync.get = async function (items: any): Promise<any> {
             }
         });
     } else if (typeof items === 'object') {
-        for (let key in items) {
+        for (const key in items) {
             result[key] = key in parsedData ? parsedData[key] : items[key];
         }
     }
@@ -43,13 +43,13 @@ steamDBBrowser.storage.sync.get = async function (items: any): Promise<any> {
     return result;
 };
 
-type StorageListener = (changes: Record<string, { oldValue: any; newValue: any; }>) => void;
-let storageListeners: StorageListener[] = [];
+type StorageListener = (changes: Record<string, { oldValue: unknown; newValue: unknown; }>) => void;
+const storageListeners: StorageListener[] = [];
 
-steamDBBrowser.storage.sync.set = async function (item: Record<string, any>) {
-    let parsedData = parseStoredData();
+steamDBBrowser.storage.sync.set = async function (item: Record<string, unknown>) {
+    const parsedData = parseStoredData();
 
-    let key = Object.keys(item)[0];
+    const key = Object.keys(item)[0];
     storageListeners.forEach(callback => {
         callback({
             [key]: {
@@ -76,7 +76,7 @@ steamDBBrowser.permissions.onAdded = {};
 steamDBBrowser.permissions.onAdded.addListener = () => {};
 steamDBBrowser.permissions.onRemoved = {};
 steamDBBrowser.permissions.onRemoved.addListener = () => {};
-steamDBBrowser.permissions.contains = (_: any, callback: (result: boolean) => void) => callback(true);
+steamDBBrowser.permissions.contains = (_: unknown, callback: (result: boolean) => void) => callback(true);
 //#endregion
 
 //#region i18n Translation
@@ -168,7 +168,7 @@ steamDBBrowser.i18n.getMessage = function (messageKey: string, substitutions: st
     if (!Array.isArray(substitutions)) {
         substitutions = [substitutions];
     }
-    let lang: LangType = JSON.parse(localStorage.getItem(langKey + VERSION) ?? '{}');
+    const lang: LangType = JSON.parse(localStorage.getItem(langKey + VERSION) ?? '{}');
     if (lang === null || Object.keys(lang).length === 0) {
         Logger.Error('SteamDB lang file not loaded in.');
         return messageKey;
@@ -203,9 +203,9 @@ steamDBBrowser.runtime.getURL = function (res: string) {
 };
 //#endregion
 
-steamDBBrowser.runtime.sendMessage = async function (message: any) {
-    const method = callable<[any]>(message.contentScriptQuery);
-    let response = await method(message) as string;
+steamDBBrowser.runtime.sendMessage = async function (message: { contentScriptQuery: string, [key: string]: unknown }) {
+    const method = callable<[unknown]>(message.contentScriptQuery);
+    const response = await method(message) as string;
     return JSON.parse(response);
 };
 

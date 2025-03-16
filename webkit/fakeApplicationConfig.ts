@@ -1,5 +1,6 @@
 export function createFakeApplicationConfig() {
     //#region code taken from the Steamdb extension
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     let applicationConfig: any =
         {
             WEBAPI_BASE_URL: 'https://api.steampowered.com/',

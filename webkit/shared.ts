@@ -1,7 +1,7 @@
 export const VERSION = '4.14';
 export const CDN = `https://cdn.jsdelivr.net/gh/SteamDatabase/BrowserExtension@${VERSION}`;
 
-export function getCdn(path: string) {  
+export function getCdn(path: string) {
     if (path.startsWith('/')) {
         return `${CDN}${path}`;
     }
@@ -57,6 +57,7 @@ export async function loadStyle(src: string) {
 
 declare global {
     interface Window {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         steamDBBrowser: any;
     }
 }

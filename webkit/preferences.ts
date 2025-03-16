@@ -31,7 +31,7 @@ export function injectPreferences() {
         ]);
 
         // Create reset button
-        let resetButton = document.createElement('div');
+        const resetButton = document.createElement('div');
         resetButton.onclick = () => {
             if (!window.confirm('Are you sure you want to reset all options?')) {
                 return;
