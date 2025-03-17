@@ -14,7 +14,9 @@
       "noImplicitAny": true,
       "allowSyntheticDefaultImports": true,
       "skipLibCheck": true,
-      "resolveJsonModule": true
+      "resolveJsonModule": true,
+      "strictNullChecks": true,
+      "noUncheckedIndexedAccess": true,
     },
     "exclude": ["node_modules"]
 }

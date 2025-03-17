@@ -6,6 +6,7 @@ logger = PluginUtils.Logger("steam-db")
 import json
 import os
 import shutil
+
 import requests
 
 WEBKIT_CSS_FILE = "steamdb-webkit.css"
@@ -20,6 +21,15 @@ DEFAULT_HEADERS = {
     'Sec-Fetch-Site': 'cross-site',
 }
 API_URL = 'https://extension.steamdb.info/api'
+
+class Logger:
+    @staticmethod
+    def warn(message: str) -> None:
+        logger.warn(message)
+
+    @staticmethod
+    def error(message: str) -> None:
+        logger.error(message)
 
 def GetPluginDir():
     return os.path.abspath(os.path.join(os.path.dirname(os.path.realpath(__file__)), '..', '..'))
