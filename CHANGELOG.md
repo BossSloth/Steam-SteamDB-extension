@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/BossSloth/Steam-SteamDB-extension/compare/v1.4.0...v1.5.0) (2025-03-17)
+
+
+### Features
+
+* updated steamdb api url ([7125236](https://github.com/BossSloth/Steam-SteamDB-extension/commit/7125236cf3841732d3b384ea22787f68a8d4bf34))
+
 # [1.4.0](https://github.com/BossSloth/Steam-SteamDB-extension/compare/v1.3.0...v1.4.0) (2025-03-13)
 
 
