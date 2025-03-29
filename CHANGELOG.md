@@ -1,3 +1,10 @@
+## [1.5.1](https://github.com/BossSloth/Steam-SteamDB-extension/compare/v1.5.0...v1.5.1) (2025-03-29)
+
+
+### Bug Fixes
+
+* don't provide name to logger ([06944fc](https://github.com/BossSloth/Steam-SteamDB-extension/commit/06944fcb4bd4f09399f969c5ac5f4bb6b2cdf9be))
+
 # [1.5.0](https://github.com/BossSloth/Steam-SteamDB-extension/compare/v1.4.0...v1.5.0) (2025-03-17)
 
 
