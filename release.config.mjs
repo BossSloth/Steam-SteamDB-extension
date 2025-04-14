@@ -13,7 +13,7 @@ export default {
     [
       '@semantic-release/exec',
       {
-        publishCmd: 'RELEASE_VERSION=${nextRelease.version} bun run helpers/update-version.ts',
+        prepareCmd: 'RELEASE_VERSION=${nextRelease.version} bun run helpers/update-version.ts',
       },
     ],
     [
@@ -26,7 +26,7 @@ export default {
     [
       '@semantic-release/exec',
       {
-        prepareCmd: './helpers/prepare.sh ${nextRelease.version}',
+        publishCmd: './helpers/prepare.sh ${nextRelease.version}',
       },
     ],
     [
