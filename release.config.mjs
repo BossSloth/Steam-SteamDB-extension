@@ -26,7 +26,7 @@ export default {
     [
       '@semantic-release/exec',
       {
-        publishCmd: './helpers/prepare.sh ${nextRelease.version}',
+        publishCmd: './helpers/publish.sh ${nextRelease.version}',
       },
     ],
     [
