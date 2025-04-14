@@ -1,5 +1,5 @@
 #!/bin/bash
-export RELEASE_VERSION=${nextRelease.version}
+export RELEASE_VERSION="$1"
 
 bun run helpers/update-version.ts
 helpers/generate-metadata.sh

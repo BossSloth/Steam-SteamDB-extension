@@ -13,7 +13,7 @@ export default {
     [
       '@semantic-release/exec',
       {
-        prepareCmd: './helpers/prepare.sh',
+        prepareCmd: './helpers/prepare.sh ${nextRelease.version}',
       },
     ],
     [
