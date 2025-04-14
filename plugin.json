@@ -3,7 +3,7 @@
   "name": "steam-db",
   "common_name": "SteamDB extension",
   "description": "SteamDB browser extension for your Steam client",
-  "version": "",
+  "version": "1.5.2",
   "include": [
     "public"
   ]
