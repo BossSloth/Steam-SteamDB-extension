@@ -5,7 +5,7 @@
 export default {
   repositoryUrl: 'https://github.com/BossSloth/Steam-SteamDB-extension',
   tagFormat: 'v${version}',
-  branches: ['master'],
+  branches: ['main'],
   plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
