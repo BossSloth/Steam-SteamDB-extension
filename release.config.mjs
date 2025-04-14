@@ -11,15 +11,16 @@ export default {
     '@semantic-release/release-notes-generator',
     '@semantic-release/changelog',
     [
-      '@semantic-release/git',
+      '@semantic-release/exec',
       {
-        assets: ['build/*.zip'],
+        prepareCmd: 'RELEASE_VERSION=${nextRelease.version} bun run helpers/update-version.ts && helpers/generate-metadata.sh && python helpers/build_zip.py',
       },
     ],
     [
-      '@semantic-release/exec',
+      '@semantic-release/git',
       {
-        prepareCmd: 'helpers/generate-metadata.sh && RELEASE_VERSION=${nextRelease.version} python helpers/build_zip.py',
+        assets: ['package.json', 'plugin.json'],
+        message: 'chore: bump version to ${nextRelease.version}',
       },
     ],
     [
