@@ -3,3 +3,4 @@ node_modules/
 .millennium/
 build/
 !bun.lockb
+metadata.json

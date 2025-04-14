@@ -11,28 +11,28 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-        
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.12'
-      
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '20'
-          
+
       - name: Setup Bun
         uses: oven-sh/setup-bun@v1
         with:
           bun-version: latest
-          
+
       - name: Install dependencies
         run: |
           bun install
@@ -45,12 +45,12 @@ jobs:
           echo "next_version=$next_version" >> $GITHUB_ENV
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          
+
       - name: Update version in files
         run: bun run helpers/update-version.ts
         env:
           RELEASE_VERSION: ${{ env.next_version }}
-          
+
       - name: Commit version updates
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
@@ -58,11 +58,6 @@ jobs:
           git add package.json plugin.json
           git commit -m "chore: bump version to ${{ env.next_version }}"
           git push
-          
-      - name: Build and create zip
-        run: python helpers/build_zip.py
-        env:
-          RELEASE_VERSION: ${{ env.next_version }}
 
       - name: Run Semantic Release
         run: npx semantic-release

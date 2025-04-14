@@ -4,7 +4,7 @@ This plugin ports the functionality of the popular [SteamDB Browser Extension](h
 
 ## Features
 >Pretty much all of the SteamDB extension's features are included in this plugin.
-  
+
 See the [SteamDB Browser Extension](https://github.com/SteamDatabase/BrowserExtension) for more details about each feature or SteamDB's [extension page](https://steamdb.info/extension/).
 > [!IMPORTANT]
 > This plugin is not endorsed by SteamDB and is not created by them. SteamDB is not responsible for providing support or assistance for this plugin. Please direct any inquiries or issues to the plugin's maintainers or ask for help in the [Millennium discord](https://steambrew.app/discord)
@@ -21,7 +21,7 @@ Some pictures where taken from the SteamDB repository
 ## Installation
 
 1. Ensure you have Millennium installed on your Steam client
-2. Download the [latest release](https://github.com/tddebart/Steam-SteamDB-addon/releases) of this plugin or from the [Steambrew](https://steambrew.app/plugin?id=c36d5f67c99f) website
+2. Download the [latest release](https://github.com/BossSloth/Steam-SteamDB-extension/releases) of this plugin or from the [Steambrew](https://steambrew.app/plugin?id=c36d5f67c99f) website
 3. Place the plugin files in your Millennium plugins directory (should be a plugins folder in your Steam client directory)
 4. Restart your Steam client
 5. Enable the SteamDB plugin in the Millennium plugin menu
