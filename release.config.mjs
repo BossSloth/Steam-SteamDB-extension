@@ -13,14 +13,20 @@ export default {
     [
       '@semantic-release/exec',
       {
-        prepareCmd: './helpers/prepare.sh ${nextRelease.version}',
+        publishCmd: 'RELEASE_VERSION=${nextRelease.version} bun run helpers/update-version.ts',
       },
     ],
     [
       '@semantic-release/git',
       {
-        assets: ['package.json', 'plugin.json', 'metadata.json'],
+        assets: ['package.json', 'plugin.json', 'CHANGELOG.md'],
         message: 'chore: bump version to ${nextRelease.version}\n\n${nextRelease.notes}',
+      },
+    ],
+    [
+      '@semantic-release/exec',
+      {
+        prepareCmd: './helpers/prepare.sh ${nextRelease.version}',
       },
     ],
     [
