@@ -19,8 +19,8 @@ export default {
     [
       '@semantic-release/git',
       {
-        assets: ['package.json', 'plugin.json'],
-        message: 'chore: bump version to ${nextRelease.version}',
+        assets: ['package.json', 'plugin.json', 'metadata.json'],
+        message: 'chore: bump version to ${nextRelease.version}\n\n${nextRelease.notes}',
       },
     ],
     [
