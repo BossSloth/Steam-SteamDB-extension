@@ -1,3 +1,11 @@
+## [1.5.2](https://github.com/BossSloth/Steam-SteamDB-extension/compare/v1.5.1...v1.5.2) (2025-04-14)
+
+
+### Bug Fixes
+
+* add execute permissions onto bash script ([c48ed2a](https://github.com/BossSloth/Steam-SteamDB-extension/commit/c48ed2a0987c6c195188a282348df065f0a8d25a))
+* add metadata.json to release zip ([498de9f](https://github.com/BossSloth/Steam-SteamDB-extension/commit/498de9f737c5c1ff95e261224a4a3469ee21515e))
+
 ## [1.5.1](https://github.com/BossSloth/Steam-SteamDB-extension/compare/v1.5.0...v1.5.1) (2025-03-29)
 
 
