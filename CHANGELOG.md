@@ -1,3 +1,10 @@
+## [1.5.3](https://github.com/BossSloth/Steam-SteamDB-extension/compare/v1.5.2...v1.5.3) (2025-07-07)
+
+
+### Bug Fixes
+
+* exclude more files from release zip ([d26359a](https://github.com/BossSloth/Steam-SteamDB-extension/commit/d26359a3535410be810d4ee7cd6e1c4264d95270))
+
 ## [1.5.2](https://github.com/BossSloth/Steam-SteamDB-extension/compare/v1.5.1...v1.5.2) (2025-04-14)
 
 
