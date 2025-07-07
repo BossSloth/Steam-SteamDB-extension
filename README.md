@@ -6,6 +6,7 @@ This plugin ports the functionality of the popular [SteamDB Browser Extension](h
 >Pretty much all of the SteamDB extension's features are included in this plugin.
 
 See the [SteamDB Browser Extension](https://github.com/SteamDatabase/BrowserExtension) for more details about each feature or SteamDB's [extension page](https://steamdb.info/extension/).
+
 > [!IMPORTANT]
 > This plugin is not endorsed by SteamDB and is not created by them. SteamDB is not responsible for providing support or assistance for this plugin. Please direct any inquiries or issues to the plugin's maintainers or ask for help in the [Millennium discord](https://steambrew.app/discord)
 
