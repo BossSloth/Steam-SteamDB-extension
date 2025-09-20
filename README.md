@@ -1,5 +1,11 @@
 # SteamDB Plugin for Millennium
 
+> [!CAUTION]
+> This plugin has been archived and is no longer maintained. No further updates will be provided.
+
+> [!CAUTION]
+> Please use the [Extendium](https://github.com/BossSloth/Extendium) plugin instead, which offers more features and is actively maintained.
+
 This plugin ports the functionality of the popular [SteamDB Browser Extension](https://github.com/SteamDatabase/BrowserExtension) to the Steam client using Millennium.
 
 ## Features
